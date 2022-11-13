@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\catagory;
 use Illuminate\Http\Request;
 
 class catagoryController extends Controller
@@ -14,7 +15,8 @@ class catagoryController extends Controller
      */
     public function index()
     {
-        // 
+        $catagory=catagory::all();
+        return $catagory;
     }
 
     /**

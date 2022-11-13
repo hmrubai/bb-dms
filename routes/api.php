@@ -28,8 +28,11 @@ Route::get('/test',function (){
     })->middleware('auth:sanctum');
 
 
+//Authentaction
+
 Route::post('/auth/register', [Api\AuthController::class, 'createUser']);
 Route::post('/auth/login', [Api\AuthController::class, 'loginUser']);
+// user 
 Route::get('/users',[userController::class,'index']);
 
 
