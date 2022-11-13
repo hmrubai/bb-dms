@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\catagory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class catagoryController extends Controller
 {
@@ -15,8 +16,8 @@ class catagoryController extends Controller
      */
     public function index()
     {
-        $catagory=catagory::all();
-        return $catagory;
+        $data = catagory::all();
+        return response()->json($data);
     }
 
     /**
@@ -26,7 +27,6 @@ class catagoryController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -37,7 +37,26 @@ class catagoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+   
+        $request->validate([
+            'name' => 'required',
+            'user_id' => 'required',
+            'description' => 'required',
+            'status' => 'required',
+            'image' => 'image|mimes:jpg,png,jpeg,gif,svg',
+        ]);
+        $input = $request->all();
+  
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['image'] = "$profileImage";
+        }
+    
+        $data=catagory::create($input);
+
+        return response()->json($data);
     }
 
     /**
@@ -48,7 +67,6 @@ class catagoryController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -71,8 +89,29 @@ class catagoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'user_id' => 'required',
+            'description' => 'required',
+            'status' => 'required',
+        ]);
+  
+        $input = $request->all();
+  
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/';
+            $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['image'] = "$profileImage";
+        }else{
+            unset($input['image']);
+        }
+          
+        $data= catagory::update($input);
+
+        return response()->json($data);
     }
+    
 
     /**
      * Remove the specified resource from storage.
