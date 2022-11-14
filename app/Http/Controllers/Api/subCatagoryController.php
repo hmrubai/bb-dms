@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\catagory;
+use App\Models\sub_catagory;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
-
-class catagoryController extends Controller
+class subCatagoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +15,7 @@ class catagoryController extends Controller
      */
     public function index()
     {
-        $data = catagory::all();
+        $data = sub_catagory::all();
         return response()->json($data);
     }
 
@@ -28,6 +26,7 @@ class catagoryController extends Controller
      */
     public function create()
     {
+        //
     }
 
     /**
@@ -38,12 +37,12 @@ class catagoryController extends Controller
      */
     public function store(Request $request)
     {
-
         try {
-            $catagory = new catagory();
+            $subCatagory = new sub_catagory();
             $request->validate([
                 'name' => 'required',
                 'user_id' => 'required',
+                'catagory_id'=>'required',
                 'description' => 'required',
                 'status' => 'required',
                 'image' => 'image|mimes:jpg,png,jpeg,gif,svg',
@@ -55,16 +54,17 @@ class catagoryController extends Controller
             } else {
                 $filename = Null;
             }
-            $catagory->name = $request->name;
-            $catagory->user_id = $request->user_id;
-            $catagory->description = $request->description;
-            $catagory->status = $request->status;
-            $catagory->image = $filename;
-            $result = $catagory->save();
+            $subCatagory->name = $request->name;
+            $subCatagory->user_id = $request->user_id;
+            $subCatagory->catagory_id = $request->catagory_id;
+            $subCatagory->description = $request->description;
+            $subCatagory->status = $request->status;
+            $subCatagory->image = $filename;
+            $result = $subCatagory->save();
 
             $data = [
                 'status' => true,
-                'message' => 'Catagory created successfully.',
+                'message' => 'Sub Catagory created successfully.',
                 'status code' => 200,
             ];
             return response()->json($data);
@@ -84,7 +84,7 @@ class catagoryController extends Controller
      */
     public function show($id)
     {
-        $data = catagory::find($id);
+        $data = sub_catagory::find($id);
         return response()->json($data);
     }
 
@@ -96,7 +96,7 @@ class catagoryController extends Controller
      */
     public function edit($id)
     {
-        $data  = catagory::findOrFail($id);
+        $data  = sub_catagory::findOrFail($id);
         return response()->json($data);
     }
 
@@ -110,9 +110,9 @@ class catagoryController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $catagory = catagory::findOrFail($id);
+            $subCatagory = sub_catagory::findOrFail($id);
 
-            $destination = public_path("storage\\" . $catagory->image);
+            $destination = public_path("storage\\" . $subCatagory->image);
             $filename = "";
             if ($request->hasFile('image')) {
                 if (File::exists($destination)) {
@@ -124,19 +124,20 @@ class catagoryController extends Controller
                 $filename = $request->image;
             }
 
-            $catagory->name = $request->name;
-            $catagory->user_id = $request->user_id;
-            $catagory->description = $request->description;
-            $catagory->status = $request->status;
-            $catagory->image = $filename;
-            $data = $catagory->save();
+            $subCatagory->name = $request->name;
+            $subCatagory->user_id = $request->user_id;
+            $subCatagory->catagory_id = $request->catagory_id;
+            $subCatagory->description = $request->description;
+            $subCatagory->status = $request->status;
+            $subCatagory->image = $filename;
+            $data = $subCatagory->save();
 
 
             $data = [
                 'status' => true,
-                'message' => 'Catagory Update Successfully.',
+                'message' => 'Sub Catagory Update Successfully.',
                 'status code' => 200,
-                'data' => $catagory,
+                'data' => $subCatagory,
             ];
 
             return response()->json($data);
@@ -148,7 +149,6 @@ class catagoryController extends Controller
         }
     }
 
-
     /**
      * Remove the specified resource from storage.
      *
@@ -158,15 +158,15 @@ class catagoryController extends Controller
     public function destroy($id)
     {
         try {
-            $catagory = catagory::findOrFail($id);
-            $destination = public_path("storage\\" . $catagory->image);
+            $subCatagory = sub_catagory::findOrFail($id);
+            $destination = public_path("storage\\" . $subCatagory->image);
             if (File::exists($destination)) {
                 File::delete($destination);
             }
-            $result = $catagory->delete();
+            $result = $subCatagory->delete();
             $data = [
                 'status' => true,
-                'message' => 'Catagory Delate Successfully.',
+                'message' => 'Sub Catagory Delate Successfully.',
                 'status code' => 200,
             ];
             return response()->json($data);
