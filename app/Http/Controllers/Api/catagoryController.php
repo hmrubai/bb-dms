@@ -129,7 +129,7 @@ class catagoryController extends Controller
             $catagory->description = $request->description;
             $catagory->status = $request->status;
             $catagory->image = $filename;
-            $data = $catagory->save();
+            $catagory->save();
 
 
             $data = [

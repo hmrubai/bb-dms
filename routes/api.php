@@ -2,10 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\Api;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\catagoryController;
 use App\Http\Controllers\Api\documentController;
 use App\Http\Controllers\api\subCatagoryController;
+use App\Http\Controllers\Api\subSubCatagoryController;
 use App\Http\Controllers\api\userController;
 
 /*
@@ -19,50 +20,60 @@ use App\Http\Controllers\api\userController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
 
+// });
+
+Route::group(['middleware'=>['auth:sanctum']],function(){
+    // Route::get('/catagory',[catagoryController::class,'index']);
 });
 
 
 
-Route::get('/test',function (){
-        return "hello";
-    })->middleware('auth:sanctum');
+Route::get('/test', function () {
+    return "hello";
+})->middleware('auth:sanctum');
 
 
 //Authentaction
+Route::post('/auth/register', [AuthController::class, 'createUser']);
+Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
-Route::post('/auth/register', [Api\AuthController::class, 'createUser']);
-Route::post('/auth/login', [Api\AuthController::class, 'loginUser']);
-// user 
-Route::get('/users',[userController::class,'index']);
+// user api
+Route::get('/users', [userController::class, 'index']);
 // Route::post('/users',[userController::class,'store']);
-Route::get('/users/{id}',[userController::class,'show']);
-Route::put('/users/{id}',[userController::class,'edit']);
-Route::post('/users/{id}',[userController::class,'update']);
-Route::delete('/users/{id}',[userController::class,'destroy']);
+Route::get('/users/{id}', [userController::class, 'show']);
+Route::put('/users/{id}', [userController::class, 'edit']);
+Route::post('/users/{id}', [userController::class, 'update']);
+Route::delete('/users/{id}', [userController::class, 'destroy']);
 
 //catagories
-Route::get('/catatgory',[catagoryController::class,'index']);
-Route::post('/catatgory',[catagoryController::class,'store']);
-Route::get('/catatgory/{id}',[catagoryController::class,'show']);
-Route::put('/catatgory/{id}',[catagoryController::class,'edit']);
-Route::post('/catatgory/{id}',[catagoryController::class,'update']);
-Route::delete('/catatgory/{id}',[catagoryController::class,'destroy']);
-//subCatagories
-Route::get('/sub_catatgory',[subCatagoryController::class,'index']);
-Route::post('/sub_catatgory',[subCatagoryController::class,'store']);
-Route::get('/sub_catatgory/{id}',[subCatagoryController::class,'show']);
-Route::put('/sub_catatgory/{id}',[subCatagoryController::class,'edit']);
-Route::post('/sub_catatgory/{id}',[subCatagoryController::class,'update']);
-Route::delete('/sub_catatgory/{id}',[subCatagoryController::class,'destroy']);
+Route::get('/catagory', [catagoryController::class, 'index']);
+Route::post('/catagory', [catagoryController::class, 'store']);
+Route::get('/catagory/{id}', [catagoryController::class, 'show']);
+Route::put('/catagory/{id}', [catagoryController::class, 'edit']);
+Route::post('/catagory/{id}', [catagoryController::class, 'update']);
+Route::delete('/catagory/{id}', [catagoryController::class, 'destroy']);
+//subCatagoris
+Route::get('/sub_catagory', [subCatagoryController::class, 'index']);
+Route::post('/sub_catagory', [subCatagoryController::class, 'store']);
+Route::get('/sub_catagory/{id}', [subCatagoryController::class, 'show']);
+Route::put('/sub_catagory/{id}', [subCatagoryController::class, 'edit']);
+Route::post('/sub_catagory/{id}', [subCatagoryController::class, 'update']);
+Route::delete('/sub_catagory/{id}', [subCatagoryController::class, 'destroy']);
+//subSubCatagories
+Route::get('/sub_sub_catagory', [subSubCatagoryController::class, 'index']);
+Route::post('/sub_sub_catagory', [subSubCatagoryController::class, 'store']);
+Route::get('/sub_sub_catagory/{id}', [subSubCatagoryController::class, 'show']);
+Route::put('/sub_sub_catagory/{id}', [subSubCatagoryController::class, 'edit']);
+Route::post('/sub_sub_catagory/{id}', [subSubCatagoryController::class, 'update']);
+Route::delete('/sub_sub_catagory/{id}', [subSubCatagoryController::class, 'destroy']);
+
 //document
-Route::get('/document',[documentController::class,'index']);
-Route::post('/document',[documentController::class,'store']);
-Route::get('/document/{id}',[documentController::class,'show']);
-Route::put('/document/{id}',[documentController::class,'edit']);
-Route::post('/document/{id}',[documentController::class,'update']);
-Route::delete('/document/{id}',[documentController::class,'destroy']);
-
-
+Route::get('/document', [documentController::class, 'index']);
+Route::post('/document', [documentController::class, 'store']);
+Route::get('/document/{id}', [documentController::class, 'show']);
+Route::put('/document/{id}', [documentController::class, 'edit']);
+Route::post('/document/{id}', [documentController::class, 'update']);
+Route::delete('/document/{id}', [documentController::class, 'destroy']);
