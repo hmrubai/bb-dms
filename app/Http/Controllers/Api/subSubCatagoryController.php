@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\sub_sub_catagory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-
-class userController extends Controller
+class subSubCatagoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,7 @@ class userController extends Controller
      */
     public function index()
     {
-        $data = User::all();
+        $data = sub_sub_catagory::all();
         return response()->json($data);
     }
 
@@ -38,7 +37,45 @@ class userController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $subSubCatagory = new sub_sub_catagory();
+            $request->validate([
+                'name' => 'required',
+                'user_id' => 'required',
+                'catagory_id' => 'required',
+                'sub_catagory_id' => 'nullable',
+                'description' => 'required',
+                'status' => 'required',
+                'image' => 'image|mimes:jpg,png,jpeg,gif,svg',
+            ]);
+
+            $filename = "";
+            if ($request->hasFile('image')) {
+                $filename = $request->file('image')->store('images', 'public');
+            } else {
+                $filename = Null;
+            }
+            $subSubCatagory->name = $request->name;
+            $subSubCatagory->user_id = $request->user_id;
+            $subSubCatagory->catagory_id = $request->catagory_id;
+            $subSubCatagory->sub_catagory_id = $request->sub_catagory_id;
+            $subSubCatagory->description = $request->description;
+            $subSubCatagory->status = $request->status;
+            $subSubCatagory->image = $filename;
+            $result = $subSubCatagory->save();
+
+            $data = [
+                'status' => true,
+                'message' => 'Sub Sub Catagory created successfully.',
+                'status code' => 200,
+            ];
+            return response()->json($data);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -49,8 +86,7 @@ class userController extends Controller
      */
     public function show($id)
     {
-        $data = User::find($id);
-        return response()->json($data);
+        //
     }
 
     /**
@@ -61,7 +97,8 @@ class userController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = sub_sub_catagory::find($id);
+        return response()->json($data);
     }
 
     /**
@@ -74,9 +111,9 @@ class userController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $catagory = User::findOrFail($id);
+            $subCatagory = sub_sub_catagory::findOrFail($id);
 
-            $destination = public_path("storage\\" . $catagory->image);
+            $destination = public_path("storage\\" . $subCatagory->image);
             $filename = "";
             if ($request->hasFile('image')) {
                 if (File::exists($destination)) {
@@ -88,18 +125,20 @@ class userController extends Controller
                 $filename = $request->image;
             }
 
-            $catagory->name = $request->name;
-            $catagory->image = $filename;
-            $catagory->status = $request->status;
-
-            $data = $catagory->save();
+            $subCatagory->name = $request->name;
+            $subCatagory->user_id = $request->user_id;
+            $subCatagory->catagory_id = $request->catagory_id;
+            $subCatagory->description = $request->description;
+            $subCatagory->status = $request->status;
+            $subCatagory->image = $filename;
+            $data = $subCatagory->save();
 
 
             $data = [
                 'status' => true,
-                'message' => 'User Update Successfully.',
+                'message' => 'Sub Catagory Update Successfully.',
                 'status code' => 200,
-                'data' => $catagory,
+                'data' => $subCatagory,
             ];
 
             return response()->json($data);
@@ -120,7 +159,7 @@ class userController extends Controller
     public function destroy($id)
     {
         try {
-            $catagory = User::findOrFail($id);
+            $catagory = sub_sub_catagory::findOrFail($id);
             $destination = public_path("storage\\" . $catagory->image);
             if (File::exists($destination)) {
                 File::delete($destination);
@@ -128,7 +167,7 @@ class userController extends Controller
             $result = $catagory->delete();
             $data = [
                 'status' => true,
-                'message' => 'User Delate Successfully.',
+                'message' => 'sub Sub Catagory Delate Successfully.',
                 'status code' => 200,
             ];
             return response()->json($data);

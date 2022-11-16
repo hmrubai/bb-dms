@@ -14,9 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('documents', function (Blueprint $table) {
-            $table->enum('admin_status', ['Pending', 'Active'])->default('pending');
             $table->unsignedBigInteger('sub_sub_catagory_id')->nullable();
-            $table->foreign('sub_sub_catagory_id')->references('id')->on('sub_catagories')->onDelete('cascade');
+            $table->foreign('sub_sub_catagory_id')->references('id')->on('sub_sub_catagories')->onDelete('cascade');
         });
     }
 

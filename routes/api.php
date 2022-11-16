@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Api;
 use App\Http\Controllers\Api\catagoryController;
+use App\Http\Controllers\Api\documentController;
 use App\Http\Controllers\api\subCatagoryController;
 use App\Http\Controllers\api\userController;
 
@@ -36,6 +37,11 @@ Route::post('/auth/register', [Api\AuthController::class, 'createUser']);
 Route::post('/auth/login', [Api\AuthController::class, 'loginUser']);
 // user 
 Route::get('/users',[userController::class,'index']);
+// Route::post('/users',[userController::class,'store']);
+Route::get('/users/{id}',[userController::class,'show']);
+Route::put('/users/{id}',[userController::class,'edit']);
+Route::post('/users/{id}',[userController::class,'update']);
+Route::delete('/users/{id}',[userController::class,'destroy']);
 
 //catagories
 Route::get('/catatgory',[catagoryController::class,'index']);
@@ -51,6 +57,12 @@ Route::get('/sub_catatgory/{id}',[subCatagoryController::class,'show']);
 Route::put('/sub_catatgory/{id}',[subCatagoryController::class,'edit']);
 Route::post('/sub_catatgory/{id}',[subCatagoryController::class,'update']);
 Route::delete('/sub_catatgory/{id}',[subCatagoryController::class,'destroy']);
-
+//document
+Route::get('/document',[documentController::class,'index']);
+Route::post('/document',[documentController::class,'store']);
+Route::get('/document/{id}',[documentController::class,'show']);
+Route::put('/document/{id}',[documentController::class,'edit']);
+Route::post('/document/{id}',[documentController::class,'update']);
+Route::delete('/document/{id}',[documentController::class,'destroy']);
 
 
