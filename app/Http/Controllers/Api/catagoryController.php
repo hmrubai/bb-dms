@@ -17,7 +17,7 @@ class catagoryController extends Controller
      */
     public function index()
     {
-        $data = catagory::all();
+        $data = catagory::get();
         return response()->json($data);
     }
 
