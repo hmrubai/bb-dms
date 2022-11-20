@@ -17,7 +17,7 @@ class catagoryController extends Controller
      */
     public function index()
     {
-        $data = catagory::get();
+        $data = catagory::with('user')->paginate(5);
         return response()->json($data);
     }
 
@@ -41,11 +41,11 @@ class catagoryController extends Controller
 
         try {
             $catagory = new catagory();
+            
             $request->validate([
                 'name' => 'required',
                 'user_id' => 'required',
                 'description' => 'required',
-                'status' => 'required',
                 'image' => 'image|mimes:jpg,png,jpeg,gif,svg',
             ]);
 
@@ -58,9 +58,9 @@ class catagoryController extends Controller
             $catagory->name = $request->name;
             $catagory->user_id = $request->user_id;
             $catagory->description = $request->description;
-            $catagory->status = $request->status;
+            // $catagory->status = $request->status;
             $catagory->image = $filename;
-            $result = $catagory->save();
+            $catagory->save();
 
             $data = [
                 'status' => true,
@@ -84,7 +84,7 @@ class catagoryController extends Controller
      */
     public function show($id)
     {
-        $data = catagory::find($id);
+        $data = catagory::with('user')->find($id);
         return response()->json($data);
     }
 
