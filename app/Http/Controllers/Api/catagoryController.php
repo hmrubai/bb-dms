@@ -109,9 +109,11 @@ class catagoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        // return response($request);
+
         try {
             $catagory = catagory::findOrFail($id);
-
             $destination = public_path("storage\\" . $catagory->image);
             $filename = "";
             if ($request->hasFile('image')) {
@@ -125,7 +127,6 @@ class catagoryController extends Controller
             }
 
             $catagory->name = $request->name;
-            $catagory->user_id = $request->user_id;
             $catagory->description = $request->description;
             $catagory->status = $request->status;
             $catagory->image = $filename;
@@ -136,7 +137,7 @@ class catagoryController extends Controller
                 'status' => true,
                 'message' => 'Catagory Update Successfully.',
                 'status code' => 200,
-                'data' => $catagory,
+                // 'data' => $catagory,
             ];
 
             return response()->json($data);
