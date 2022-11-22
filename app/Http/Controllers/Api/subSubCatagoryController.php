@@ -15,7 +15,8 @@ class subSubCatagoryController extends Controller
      */
     public function index()
     {
-        $data = sub_sub_catagory::all();
+    
+        $data = sub_sub_catagory::with('catagory')->with('user')->with('subCatagory')->paginate(5);
         return response()->json($data);
     }
 
@@ -45,7 +46,7 @@ class subSubCatagoryController extends Controller
                 'catagory_id' => 'required',
                 'sub_catagory_id' => 'nullable',
                 'description' => 'required',
-                'status' => 'required',
+                // 'status' => 'required',
                 'image' => 'image|mimes:jpg,png,jpeg,gif,svg',
             ]);
 
@@ -60,7 +61,7 @@ class subSubCatagoryController extends Controller
             $subSubCatagory->catagory_id = $request->catagory_id;
             $subSubCatagory->sub_catagory_id = $request->sub_catagory_id;
             $subSubCatagory->description = $request->description;
-            $subSubCatagory->status = $request->status;
+            // $subSubCatagory->status = $request->status;
             $subSubCatagory->image = $filename;
             $result = $subSubCatagory->save();
 
@@ -86,7 +87,8 @@ class subSubCatagoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Sub_sub_catagory::with('catagory')->with('user')->with('subCatagory')->find($id);
+        return response()->json($data);
     }
 
     /**

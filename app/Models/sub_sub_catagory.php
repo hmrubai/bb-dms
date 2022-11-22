@@ -17,14 +17,24 @@ class sub_sub_catagory extends Model
         'status',
     ];
 
-    public function sub_catagory()
+    public function subCatagory()
     {
         return $this->belongsTo(sub_catagory::class);
     }
 
-    public function documents()
+    public function document()
     {
         return $this->hasMany(document::class);
+    }
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function catagory()
+    {
+        return $this->belongsTo(catagory::class);
     }
 
 }

@@ -56,19 +56,19 @@ Route::put('/catagory/{id}', [catagoryController::class, 'edit']);
 Route::post('/catagory/{id}', [catagoryController::class, 'update']);
 Route::delete('/catagory/{id}', [catagoryController::class, 'destroy']);
 //subCatagoris
-Route::get('/sub_catagory', [subCatagoryController::class, 'index']);
-Route::post('/sub_catagory', [subCatagoryController::class, 'store']);
-Route::get('/sub_catagory/{id}', [subCatagoryController::class, 'show']);
-Route::put('/sub_catagory/{id}', [subCatagoryController::class, 'edit']);
-Route::post('/sub_catagory/{id}', [subCatagoryController::class, 'update']);
-Route::delete('/sub_catagory/{id}', [subCatagoryController::class, 'destroy']);
+Route::get('/sub_category', [subCatagoryController::class, 'index']);
+Route::post('/sub_category', [subCatagoryController::class, 'store']);
+Route::get('/sub_category/{id}', [subCatagoryController::class, 'show']);
+Route::put('/sub_category/{id}', [subCatagoryController::class, 'edit']);
+Route::post('/sub_category/{id}', [subCatagoryController::class, 'update']);
+Route::delete('/sub_category/{id}', [subCatagoryController::class, 'destroy']);
 //subSubCatagories
-Route::get('/sub_sub_catagory', [subSubCatagoryController::class, 'index']);
-Route::post('/sub_sub_catagory', [subSubCatagoryController::class, 'store']);
-Route::get('/sub_sub_catagory/{id}', [subSubCatagoryController::class, 'show']);
-Route::put('/sub_sub_catagory/{id}', [subSubCatagoryController::class, 'edit']);
-Route::post('/sub_sub_catagory/{id}', [subSubCatagoryController::class, 'update']);
-Route::delete('/sub_sub_catagory/{id}', [subSubCatagoryController::class, 'destroy']);
+Route::get('/sub_sub_category', [subSubCatagoryController::class, 'index']);
+Route::post('/sub_sub_category', [subSubCatagoryController::class, 'store']);
+Route::get('/sub_sub_category/{id}', [subSubCatagoryController::class, 'show']);
+Route::put('/sub_sub_category/{id}', [subSubCatagoryController::class, 'edit']);
+Route::post('/sub_sub_category/{id}', [subSubCatagoryController::class, 'update']);
+Route::delete('/sub_sub_category/{id}', [subSubCatagoryController::class, 'destroy']);
 
 //document
 Route::get('/document', [documentController::class, 'index']);

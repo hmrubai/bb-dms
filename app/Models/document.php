@@ -27,11 +27,11 @@ class document extends Model
         return $this->belongsTo(catagory::class);
     }
 
-    public function sub_catagory()
+    public function subCatagory()
     {
         return $this->belongsTo(sub_catagory::class);
     }
-    public function sub_sub_catagory()
+    public function subSubCatagory()
     {
         return $this->belongsTo(sub_sub_catagory::class);
     }

@@ -22,15 +22,21 @@ class sub_catagory extends Model
         return $this->belongsTo(catagory::class);
     }
 
-    public function sub_sub_catagories()
+    public function subSubCatagory()
     {
         return $this->hasMany(sub_sub_catagory::class);
     }
 
-    public function documents()
+    public function document()
     {
         return $this->hasMany(document::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 
 
 

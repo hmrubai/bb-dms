@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\sub_catagory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+
 class subCatagoryController extends Controller
 {
     /**
@@ -15,7 +16,8 @@ class subCatagoryController extends Controller
      */
     public function index()
     {
-        $data = sub_catagory::all();
+
+        $data = sub_catagory::with('catagory')->with('user')->paginate(5);
         return response()->json($data);
     }
 
@@ -42,9 +44,9 @@ class subCatagoryController extends Controller
             $request->validate([
                 'name' => 'required',
                 'user_id' => 'required',
-                'catagory_id'=>'required',
+                'catagory_id' => 'required',
                 'description' => 'required',
-                'status' => 'required',
+                
                 'image' => 'image|mimes:jpg,png,jpeg,gif,svg',
             ]);
 
@@ -58,7 +60,7 @@ class subCatagoryController extends Controller
             $subCatagory->user_id = $request->user_id;
             $subCatagory->catagory_id = $request->catagory_id;
             $subCatagory->description = $request->description;
-            $subCatagory->status = $request->status;
+            // $subCatagory->status = $request->status;
             $subCatagory->image = $filename;
             $result = $subCatagory->save();
 
@@ -84,7 +86,8 @@ class subCatagoryController extends Controller
      */
     public function show($id)
     {
-        $data = sub_catagory::find($id);
+       
+        $data = sub_catagory::with('catagory')->with('user')->find($id);
         return response()->json($data);
     }
 
@@ -125,8 +128,6 @@ class subCatagoryController extends Controller
             }
 
             $subCatagory->name = $request->name;
-            $subCatagory->user_id = $request->user_id;
-            $subCatagory->catagory_id = $request->catagory_id;
             $subCatagory->description = $request->description;
             $subCatagory->status = $request->status;
             $subCatagory->image = $filename;
