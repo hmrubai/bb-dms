@@ -42,7 +42,7 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
 // user api
 Route::get('/users', [userController::class, 'index']);
-// Route::post('/users',[userController::class,'store']);
+Route::post('/users',[userController::class,'store']);
 Route::get('/users/{id}', [userController::class, 'show']);
 Route::put('/users/{id}', [userController::class, 'edit']);
 Route::post('/users/{id}', [userController::class, 'update']);

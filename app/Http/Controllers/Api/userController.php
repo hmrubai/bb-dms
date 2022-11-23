@@ -16,8 +16,9 @@ class userController extends Controller
      */
     public function index()
     {
-        $data = User::all();
+        $data = User::paginate(5);
         return response()->json($data);
+       
     }
 
     /**
@@ -38,7 +39,65 @@ class userController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        // return response()->json($request->all());
+
+        try {
+            $user = new User();
+
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email',
+                'username' => 'required',
+                'password' => [
+                    'required',
+                    'min:6',
+                    'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+                ],
+                // 'image' => ' nullable|image|mimes:jpg,png,jpeg,gif,svg',
+
+                'status' => 'required',
+                'gender' => 'required',
+                'number' => 'required',
+
+            ]);
+
+            // if ($request->fails()) {
+            //     return response()->json([
+            //         'status' => false,
+            //         'message' => 'validation error',
+            //         'errors' => $request->errors()
+            //     ], 401);
+            // }
+
+            $filename = "";
+            if ($request->hasFile('image')) {
+                $filename = $request->file('image')->store('images', 'public');
+            } else {
+                $filename = Null;
+            }
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->username = $request->username;
+            $user->number = $request->number;
+            $user->password = bcrypt($request->password);
+            $user->status = $request->status;
+            $user->gender = $request->gender;
+            $user->image = $filename;
+            $user->save();
+
+            $data = [
+                'status' => true,
+                'message' => 'User created successfully.',
+                'status code' => 200,
+            ];
+            return response()->json($data);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -74,32 +133,52 @@ class userController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $catagory = User::findOrFail($id);
 
-            $destination = public_path("storage\\" . $catagory->image);
+            $user = User::findOrFail($id);
+            $request->validate([
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email,'.$user->id,
+                // 'username' => 'required',
+                'password' => [
+                    'required',
+                    'min:6',
+                    'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+                ],
+                // 'image' => 'nullable|image|mimes:jpeg,png|max:100',
+                // 'status' => 'required',
+                // 'gender' => 'required',
+                // 'number' => 'required',
+
+            ]);
+            $destination = public_path("storage\\" . $user->image);
             $filename = "";
             if ($request->hasFile('image')) {
                 if (File::exists($destination)) {
                     File::delete($destination);
                 }
-
                 $filename = $request->file('image')->store('images', 'public');
             } else {
                 $filename = $request->image;
             }
 
-            $catagory->name = $request->name;
-            $catagory->image = $filename;
-            $catagory->status = $request->status;
 
-            $data = $catagory->save();
+
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->username = $request->username;
+            $user->number = $request->number;
+            $user->password = bcrypt($request->password);
+            $user->status = $request->status;
+            $user->gender = $request->gender;
+            $user->image = $filename;
+            $user->save();
 
 
             $data = [
                 'status' => true,
                 'message' => 'User Update Successfully.',
                 'status code' => 200,
-                'data' => $catagory,
+                'data' => $user,
             ];
 
             return response()->json($data);

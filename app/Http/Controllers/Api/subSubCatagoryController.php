@@ -128,8 +128,8 @@ class subSubCatagoryController extends Controller
             }
 
             $subCatagory->name = $request->name;
-            $subCatagory->user_id = $request->user_id;
-            $subCatagory->catagory_id = $request->catagory_id;
+            // $subCatagory->user_id = $request->user_id;
+            // $subCatagory->catagory_id = $request->catagory_id;
             $subCatagory->description = $request->description;
             $subCatagory->status = $request->status;
             $subCatagory->image = $filename;
@@ -138,7 +138,7 @@ class subSubCatagoryController extends Controller
 
             $data = [
                 'status' => true,
-                'message' => 'Sub Catagory Update Successfully.',
+                'message' => 'Sub Sub Catagory Update Successfully.',
                 'status code' => 200,
                 'data' => $subCatagory,
             ];
