@@ -21,6 +21,12 @@ class catagoryController extends Controller
         return response()->json($data);
     }
 
+    public function allCategory()
+    {
+        $data = catagory::all();
+        return response()->json($data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -85,6 +91,18 @@ class catagoryController extends Controller
     public function show($id)
     {
         $data = catagory::with('user')->find($id);
+        return response()->json($data);
+    }
+
+       /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showSubCatagory($id)
+    {
+        $data = catagory::with('subCatagory')->with('subSubCatagory')->find($id);
         return response()->json($data);
     }
 

@@ -55,6 +55,9 @@ Route::get('/catagory/{id}', [catagoryController::class, 'show']);
 Route::put('/catagory/{id}', [catagoryController::class, 'edit']);
 Route::post('/catagory/{id}', [catagoryController::class, 'update']);
 Route::delete('/catagory/{id}', [catagoryController::class, 'destroy']);
+Route::get('/category_all', [catagoryController::class, 'allCategory']);
+Route::get('/category_show/{id}', [catagoryController::class, 'showSubCatagory']);
+
 //subCatagoris
 Route::get('/sub_category', [subCatagoryController::class, 'index']);
 Route::post('/sub_category', [subCatagoryController::class, 'store']);
@@ -62,6 +65,8 @@ Route::get('/sub_category/{id}', [subCatagoryController::class, 'show']);
 Route::put('/sub_category/{id}', [subCatagoryController::class, 'edit']);
 Route::post('/sub_category/{id}', [subCatagoryController::class, 'update']);
 Route::delete('/sub_category/{id}', [subCatagoryController::class, 'destroy']);
+Route::get('/sub_category_show/{id}', [subCatagoryController::class, 'showSubSubCatagory']);
+
 //subSubCatagories
 Route::get('/sub_sub_category', [subSubCatagoryController::class, 'index']);
 Route::post('/sub_sub_category', [subSubCatagoryController::class, 'store']);

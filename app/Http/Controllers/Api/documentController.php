@@ -47,9 +47,9 @@ class documentController extends Controller
                 'sub_catagory_id' => 'nullable',
                 'sub_sub_catagory_id' => 'nullable',
                 'description' => 'nullable',
-                'admin_status' => 'required',
+               
                 'status' => 'required',
-                'file' => 'required|mimes:csv,txt,xlx,xls,pdf,docx',
+                'file' => 'required|mimes:csv,txt,xlx,xls,pdf,docx,doc,jpg,png,jpeg,gif,svg',
             ]);
 
             $filename = "";
@@ -64,15 +64,16 @@ class documentController extends Controller
             $document->sub_catagory_id = $request->sub_catagory_id;
             $document->sub_sub_catagory_id = $request->sub_sub_catagory_id;
             $document->description = $request->description;
-            $document->admin_status = $request->admin_status;
+            // $document->admin_status = $request->admin_status;
             $document->status = $request->status;
             $document->file = $filename;
-            $result = $document->save();
+            $document->save();
 
             $data = [
                 'status' => true,
                 'message' => 'Document created successfully.',
                 'status code' => 200,
+                'data' => $document,
             ];
             return response()->json($data);
         } catch (\Throwable $th) {

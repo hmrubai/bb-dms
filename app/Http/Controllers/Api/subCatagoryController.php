@@ -90,7 +90,20 @@ class subCatagoryController extends Controller
         $data = sub_catagory::with('catagory')->with('user')->find($id);
         return response()->json($data);
     }
-
+        /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showSubSubCatagory($id)
+    {
+       
+        $data = sub_catagory::with('SubSubCatagory')->with('user')->find($id);
+        return response()->json($data);
+    }
+    
+    
     /**
      * Show the form for editing the specified resource.
      *
