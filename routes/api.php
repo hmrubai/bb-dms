@@ -25,7 +25,7 @@ use App\Http\Controllers\api\userController;
 
 // });
 
-Route::group(['middleware'=>['auth:sanctum']],function(){
+Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::get('/catagory',[catagoryController::class,'index']);
 });
 
@@ -42,19 +42,19 @@ Route::post('/auth/login', [AuthController::class, 'loginUser']);
 
 // user api
 Route::get('/users', [userController::class, 'index']);
-Route::post('/users',[userController::class,'store']);
+Route::post('/users', [userController::class, 'store']);
 Route::get('/users/{id}', [userController::class, 'show']);
 Route::put('/users/{id}', [userController::class, 'edit']);
 Route::post('/users/{id}', [userController::class, 'update']);
 Route::delete('/users/{id}', [userController::class, 'destroy']);
 
 //catagories
-Route::get('/catagory', [catagoryController::class, 'index']);
-Route::post('/catagory', [catagoryController::class, 'store']);
-Route::get('/catagory/{id}', [catagoryController::class, 'show']);
-Route::put('/catagory/{id}', [catagoryController::class, 'edit']);
-Route::post('/catagory/{id}', [catagoryController::class, 'update']);
-Route::delete('/catagory/{id}', [catagoryController::class, 'destroy']);
+Route::get('/category', [catagoryController::class, 'index']);
+Route::post('/category', [catagoryController::class, 'store']);
+Route::get('/category/{id}', [catagoryController::class, 'show']);
+Route::put('/category/{id}', [catagoryController::class, 'edit']);
+Route::post('/category/{id}', [catagoryController::class, 'update']);
+Route::delete('/category/{id}', [catagoryController::class, 'destroy']);
 Route::get('/category_all', [catagoryController::class, 'allCategory']);
 Route::get('/category_show/{id}', [catagoryController::class, 'showSubCatagory']);
 
@@ -82,3 +82,5 @@ Route::get('/document/{id}', [documentController::class, 'show']);
 Route::put('/document/{id}', [documentController::class, 'edit']);
 Route::post('/document/{id}', [documentController::class, 'update']);
 Route::delete('/document/{id}', [documentController::class, 'destroy']);
+Route::get('/document_show/{id}', [documentController::class, 'showDocument']);
+Route::get ('/category_document/{id}',[documentController::class,'showCategoryDocument']);

@@ -47,7 +47,7 @@ class documentController extends Controller
                 'sub_catagory_id' => 'nullable',
                 'sub_sub_catagory_id' => 'nullable',
                 'description' => 'nullable',
-               
+
                 'status' => 'required',
                 'file' => 'required|mimes:csv,txt,xlx,xls,pdf,docx,doc,jpg,png,jpeg,gif,svg',
             ]);
@@ -188,4 +188,23 @@ class documentController extends Controller
             ], 500);
         }
     }
+
+    public function download($id)
+    {
+        $document = document::findOrFail($id);
+        $file = public_path("storage\\" . $document->file);
+        $headers = array(
+            'Content-Type: application/pdf',
+        );
+        return response()->download($file, $document->name, $headers);
+    }
+
+
+    public function showCategoryDocument($id)
+    {
+        $data = document::where('catagory_id', $id)->with('user')->get();
+        return response()->json($data);
+    }
+
+
 }
