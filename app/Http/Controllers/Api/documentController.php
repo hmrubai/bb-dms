@@ -47,7 +47,6 @@ class documentController extends Controller
                 'sub_catagory_id' => 'nullable',
                 'sub_sub_catagory_id' => 'nullable',
                 'description' => 'nullable',
-
                 'status' => 'required',
                 'file' => 'required|mimes:csv,txt,xlx,xls,pdf,docx,doc,jpg,png,jpeg,gif,svg',
             ]);
@@ -202,7 +201,7 @@ class documentController extends Controller
 
     public function showCategoryDocument($id)
     {
-        $data = document::where('catagory_id', $id)->with('user')->get();
+        $data = document::where('catagory_id', $id)->with('user')->with('catagory')->get();
         return response()->json($data);
     }
 

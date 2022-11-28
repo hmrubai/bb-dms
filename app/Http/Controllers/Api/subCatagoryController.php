@@ -39,6 +39,9 @@ class subCatagoryController extends Controller
      */
     public function store(Request $request)
     {
+
+      
+
         try {
             $subCatagory = new sub_catagory();
             $request->validate([
