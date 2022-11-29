@@ -52,7 +52,7 @@ class catagoryController extends Controller
                 'name' => 'required',
                 'user_id' => 'required',
                 'description' => 'required',
-                'image' => 'image|mimes:jpg,png,jpeg,gif,svg',
+                'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg',
             ]);
 
             $filename = "";
