@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\document;
+use App\Models\sub_catagory;
+use App\Models\sub_sub_catagory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -201,9 +203,37 @@ class documentController extends Controller
 
     public function showCategoryDocument($id)
     {
-        $data = document::where('catagory_id', $id)->with('user')->with('catagory')->get();
+        $data = document::where('catagory_id', $id)
+            ->where('sub_catagory_id', null)
+            ->where('sub_sub_catagory_id', null)
+            ->with('user')->get();
+
         return response()->json($data);
     }
 
+    public function showSubCategory($id)
+    {
+        $data = sub_catagory::where('catagory_id', $id)->with('document')->get();
+        return response()->json($data);
+    }
 
+    public function showSubCategoryDocument($id)
+    {
+        $data = document::where('sub_catagory_id', $id)
+            ->where('sub_sub_catagory_id', null)
+            ->with('user')->with('catagory')->get();
+        return response()->json($data);
+    }
+    public function showSubSubCategory($id)
+    {
+        $data = sub_sub_catagory::where('sub_catagory_id', $id)->with('document')->get();
+        return response()->json($data);
+    }
+    public function showSubSubCategoryDocument($id)
+    {
+        $data = document::where('sub_sub_catagory_id', $id)
+
+            ->with('user')->with('catagory')->get();
+        return response()->json($data);
+    }
 }

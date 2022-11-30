@@ -31,6 +31,7 @@ class document extends Model
     {
         return $this->belongsTo(sub_catagory::class);
     }
+    
     public function subSubCatagory()
     {
         return $this->belongsTo(sub_sub_catagory::class);

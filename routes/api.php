@@ -84,3 +84,8 @@ Route::post('/document/{id}', [documentController::class, 'update']);
 Route::delete('/document/{id}', [documentController::class, 'destroy']);
 Route::get('/document_show/{id}', [documentController::class, 'showDocument']);
 Route::get ('/category_document/{id}',[documentController::class,'showCategoryDocument']);
+Route::get ('/show_sub_category/{id}',[documentController::class,'showSubCategory']);
+Route::get('/show_sub_category_document/{id}',[documentController::class,'showSubCategoryDocument']);
+Route::get('/show_sub_sub_category/{id}',[documentController::class,'showSubSubCategory']);
+Route::get('/show_sub_sub_category_document/{id}',[documentController::class,'showSubSubCategoryDocument']);
+
