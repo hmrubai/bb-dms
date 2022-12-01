@@ -21,6 +21,8 @@ class subCatagoryController extends Controller
         return response()->json($data);
     }
 
+ 
+
     /**
      * Show the form for creating a new resource.
      *

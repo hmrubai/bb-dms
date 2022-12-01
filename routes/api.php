@@ -47,6 +47,7 @@ Route::get('/users/{id}', [userController::class, 'show']);
 Route::put('/users/{id}', [userController::class, 'edit']);
 Route::post('/users/{id}', [userController::class, 'update']);
 Route::delete('/users/{id}', [userController::class, 'destroy']);
+Route::get('/all_user', [userController::class, 'allUser']);
 
 //catagories
 Route::get('/category', [catagoryController::class, 'index']);

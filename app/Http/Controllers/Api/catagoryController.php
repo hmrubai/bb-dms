@@ -21,6 +21,10 @@ class catagoryController extends Controller
         return response()->json($data);
     }
 
+ 
+
+
+
     public function allCategory()
     {
         $data = catagory::all();
