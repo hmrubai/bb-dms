@@ -90,3 +90,4 @@ Route::get('/show_sub_category_document/{id}',[documentController::class,'showSu
 Route::get('/show_sub_sub_category/{id}',[documentController::class,'showSubSubCategory']);
 Route::get('/show_sub_sub_category_document/{id}',[documentController::class,'showSubSubCategoryDocument']);
 
+

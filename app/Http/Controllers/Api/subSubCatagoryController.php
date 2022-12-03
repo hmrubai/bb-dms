@@ -87,7 +87,7 @@ class subSubCatagoryController extends Controller
      */
     public function show($id)
     {
-        $data = Sub_sub_catagory::with('catagory')->with('user')->with('subCatagory')->find($id);
+        $data = sub_sub_catagory::with('catagory')->with('user')->with('subCatagory')->find($id);
         return response()->json($data);
     }
 
