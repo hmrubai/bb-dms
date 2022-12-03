@@ -63,7 +63,7 @@ class userController extends Controller
                 ],
                 // 'image' => ' nullable|image|mimes:jpg,png,jpeg,gif,svg',
 
-                'status' => 'required',
+               
                 'gender' => 'required',
                 'number' => 'required',
 
