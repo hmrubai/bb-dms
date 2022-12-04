@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\role;
 use Illuminate\Http\Request;
 
 class roleController extends Controller
@@ -35,7 +36,16 @@ class roleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //role
+        $role = new role();
+        $role->name = $request->name;
+        $role->save();
+        return response()->json(['message' => 'Role Created Successfully']);
+
+       
+
+
+
     }
 
     /**
@@ -46,7 +56,10 @@ class roleController extends Controller
      */
     public function show($id)
     {
-        //
+        //singal role
+        $role = role::find($id);
+        return response()->json($role);
+
     }
 
     /**
@@ -69,7 +82,12 @@ class roleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //update role
+        $role = role::find($id);
+        $role->name = $request->name;
+        $role->save();
+        return response()->json(['message' => 'Role Updated Successfully']);
+
     }
 
     /**
@@ -80,6 +98,10 @@ class roleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //delete role
+        $role = role::find($id);
+        $role->delete();
+        return response()->json(['message' => 'Role Deleted Successfully']);
+
     }
 }

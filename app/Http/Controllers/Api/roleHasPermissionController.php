@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\roleHasPermission;
 use Illuminate\Http\Request;
 
 class roleHasPermissionController extends Controller
@@ -35,7 +36,9 @@ class roleHasPermissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // role has permission
+  
+
     }
 
     /**
