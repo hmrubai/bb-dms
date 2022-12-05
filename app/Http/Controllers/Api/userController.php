@@ -47,7 +47,7 @@ class userController extends Controller
     public function store(Request $request)
     {
 
-        return response()->json($request->all());
+     
 
         try {
             $user = new User();
@@ -92,6 +92,7 @@ class userController extends Controller
             $user->gender = $request->gender;
             $user->image = $filename;
             $user->save();
+            
 
             $data = [
                 'status' => true,
@@ -99,6 +100,7 @@ class userController extends Controller
                 'status code' => 200,
             ];
             return response()->json($data);
+            
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
