@@ -36,9 +36,24 @@ class roleHasPermissionController extends Controller
      */
     public function store(Request $request)
     {
-        // role has permission
-  
+        //role has permission
 
+        try {
+
+
+            foreach ($request->permission_id as $key => $permissionId) {
+                $userHasPer[] = [
+                    'role_id' => $request->role_id,
+                    'permission_id' => $permissionId,
+                ];
+            }
+
+            roleHasPermission::insert($userHasPer);
+
+            return response()->json(['message' => 'Permission Assigned Successfully']);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()]);
+        }
     }
 
     /**
@@ -72,7 +87,27 @@ class roleHasPermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $userHasPerDel = roleHasPermission::where('role_id', $id)->get();
+            foreach ($userHasPerDel as $key => $value) {
+                $value->delete();
+            }
+
+         
+            foreach ($request->permission_id as $key => $permissionId) {
+                $userHasPer[] = [
+                    'role_id' => $request->role_id,
+                    'permission_id' => $permissionId,
+                ];
+            }
+            
+            roleHasPermission::insert($userHasPer);
+            return response()->json(['message' => 'Permission Assigned Successfully']);
+
+
+        } catch (\Throwable $th) {
+            return response()->json(['message' => $th->getMessage()]);
+        }
     }
 
     /**

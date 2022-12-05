@@ -15,7 +15,10 @@ class roleController extends Controller
      */
     public function index()
     {
-        //
+
+
+        $role = role::with('user')->get();
+        return response()->json($role);
     }
 
     /**
@@ -41,11 +44,6 @@ class roleController extends Controller
         $role->name = $request->name;
         $role->save();
         return response()->json(['message' => 'Role Created Successfully']);
-
-       
-
-
-
     }
 
     /**
@@ -57,9 +55,8 @@ class roleController extends Controller
     public function show($id)
     {
         //singal role
-        $role = role::find($id);
+        $role = role::with('permission')->find($id);
         return response()->json($role);
-
     }
 
     /**
@@ -87,7 +84,6 @@ class roleController extends Controller
         $role->name = $request->name;
         $role->save();
         return response()->json(['message' => 'Role Updated Successfully']);
-
     }
 
     /**
@@ -102,6 +98,5 @@ class roleController extends Controller
         $role = role::find($id);
         $role->delete();
         return response()->json(['message' => 'Role Deleted Successfully']);
-
     }
 }

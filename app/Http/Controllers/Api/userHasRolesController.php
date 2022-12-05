@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\userHasRole;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 
 class userHasRolesController extends Controller
 {
@@ -35,7 +37,16 @@ class userHasRolesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //userHasRoles
+        try {
+            $userHasRoles = new userHasRole();
+            $userHasRoles->user_id = $request->user_id;
+            $userHasRoles->role_id = $request->role_id;
+            $userHasRoles->save();
+            return response()->json(['message' => 'userHasRoles Created Successfully']);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'userHasRoles Created Failed']);
+        }
     }
 
     /**

@@ -47,7 +47,7 @@ class userController extends Controller
     public function store(Request $request)
     {
 
-        // return response()->json($request->all());
+        return response()->json($request->all());
 
         try {
             $user = new User();

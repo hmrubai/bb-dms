@@ -53,8 +53,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(document::class);
     }
+ 
 
 
+
+    // role
+ 
 
 
 }

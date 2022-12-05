@@ -5,9 +5,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\catagoryController;
 use App\Http\Controllers\Api\documentController;
+use App\Http\Controllers\api\permissionController;
+use App\Http\Controllers\api\roleController;
+use App\Http\Controllers\api\roleHasPermissionController;
 use App\Http\Controllers\api\subCatagoryController;
 use App\Http\Controllers\Api\subSubCatagoryController;
 use App\Http\Controllers\api\userController;
+use App\Http\Controllers\api\userHasPermissionController;
+use App\Http\Controllers\api\userHasRolesController;
+use App\Models\permission;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,10 +90,28 @@ Route::put('/document/{id}', [documentController::class, 'edit']);
 Route::post('/document/{id}', [documentController::class, 'update']);
 Route::delete('/document/{id}', [documentController::class, 'destroy']);
 Route::get('/document_show/{id}', [documentController::class, 'showDocument']);
-Route::get ('/category_document/{id}',[documentController::class,'showCategoryDocument']);
-Route::get ('/show_sub_category/{id}',[documentController::class,'showSubCategory']);
-Route::get('/show_sub_category_document/{id}',[documentController::class,'showSubCategoryDocument']);
-Route::get('/show_sub_sub_category/{id}',[documentController::class,'showSubSubCategory']);
-Route::get('/show_sub_sub_category_document/{id}',[documentController::class,'showSubSubCategoryDocument']);
+Route::get('/category_document/{id}', [documentController::class, 'showCategoryDocument']);
+Route::get('/show_sub_category/{id}', [documentController::class, 'showSubCategory']);
+Route::get('/show_sub_category_document/{id}', [documentController::class, 'showSubCategoryDocument']);
+Route::get('/show_sub_sub_category/{id}', [documentController::class, 'showSubSubCategory']);
+Route::get('/show_sub_sub_category_document/{id}', [documentController::class, 'showSubSubCategoryDocument']);
 
+//permission
+Route::get('/permission', [permissionController::class, 'index']);
 
+//role
+Route::get('/role', [roleController::class, 'index']);
+Route::get('/role/{id}', [roleController::class, 'show']);
+Route::post('/role', [roleController::class, 'store']);
+Route::post('/role/{id}', [roleController::class, 'update']);
+
+//userHasPermission
+Route::post('/user_has_permission', [userHasPermissionController::class, 'store']);
+Route::post('/user_has_permission/{id}', [userHasPermissionController::class, 'update']);
+
+//roleHasPermission
+Route::post('/role_has_permission', [roleHasPermissionController::class, 'store']);
+Route::post('/role_has_permission/{id}', [roleHasPermissionController::class, 'update']);
+
+//userHasRole
+Route::post('/user_has_role', [userHasRolesController::class, 'store']);
