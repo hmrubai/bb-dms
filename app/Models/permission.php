@@ -14,6 +14,7 @@ class permission extends Model
     {
         return $this->belongsTo(user::class);
     }
+    
 
 
 }

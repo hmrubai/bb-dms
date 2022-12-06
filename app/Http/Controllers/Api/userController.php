@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\userHasPermission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -18,14 +19,12 @@ class userController extends Controller
     {
         $data = User::paginate(5);
         return response()->json($data);
-       
     }
 
     public function allUser()
     {
-        $data = User::all();
+        $data = User::with('userHasPermission', 'userHasPermission.permission')->get();
         return response()->json($data);
-       
     }
 
     /**
@@ -46,12 +45,8 @@ class userController extends Controller
      */
     public function store(Request $request)
     {
-
-     
-
         try {
             $user = new User();
-
             $request->validate([
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email',
@@ -61,27 +56,14 @@ class userController extends Controller
                     'min:6',
                     'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
                 ],
-                // 'image' => ' nullable|image|mimes:jpg,png,jpeg,gif,svg',
-
-               
+                'image' => ' nullable|image|mimes:jpg,png,jpeg,gif,svg',
                 'gender' => 'required',
                 'number' => 'required',
-
             ]);
 
-            // if ($request->fails()) {
-            //     return response()->json([
-            //         'status' => false,
-            //         'message' => 'validation error',
-            //         'errors' => $request->errors()
-            //     ], 401);
-            // }
-
-            $filename = "";
+            $filename = null;
             if ($request->hasFile('image')) {
                 $filename = $request->file('image')->store('images', 'public');
-            } else {
-                $filename = Null;
             }
             $user->name = $request->name;
             $user->email = $request->email;
@@ -92,15 +74,24 @@ class userController extends Controller
             $user->gender = $request->gender;
             $user->image = $filename;
             $user->save();
-            
+            $permissionArr = json_decode($request->permission);
 
+            if ($permissionArr) {
+                // $permission_list = explode(",", $request->permission);
+                foreach ($permissionArr as $key => $permissionId) {
+                    $userHasPer[] = [
+                        'user_id' => $user->id,
+                        'permission_id' => $permissionId,
+                    ];
+                }
+                userHasPermission::insert($userHasPer);
+            }
             $data = [
                 'status' => true,
                 'message' => 'User created successfully.',
                 'status code' => 200,
             ];
             return response()->json($data);
-            
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -117,7 +108,7 @@ class userController extends Controller
      */
     public function show($id)
     {
-        $data = User::find($id);
+        $data = User::with('userHasPermission', 'userHasPermission.permission')->find($id);
         return response()->json($data);
     }
 
@@ -141,23 +132,19 @@ class userController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         try {
 
             $user = User::findOrFail($id);
             $request->validate([
                 'name' => 'required',
-                'email' => 'required|email|unique:users,email,'.$user->id,
+                'email' => 'required|email|unique:users,email,' . $user->id,
                 // 'username' => 'required',
                 'password' => [
                     'required',
                     'min:6',
                     'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
                 ],
-                // 'image' => 'nullable|image|mimes:jpeg,png|max:100',
-                // 'status' => 'required',
-                // 'gender' => 'required',
-                // 'number' => 'required',
-
             ]);
             $destination = public_path("storage\\" . $user->image);
             $filename = "";
@@ -169,9 +156,6 @@ class userController extends Controller
             } else {
                 $filename = $request->image;
             }
-
-
-
             $user->name = $request->name;
             $user->email = $request->email;
             $user->username = $request->username;
@@ -181,7 +165,24 @@ class userController extends Controller
             $user->gender = $request->gender;
             $user->image = $filename;
             $user->save();
+            $userHasPerDel = userHasPermission::where('user_id', $user->id)->get();
 
+            
+            foreach ($userHasPerDel as $key => $value) {
+                $value->delete();
+            }
+
+            $permissionArr = json_decode($request->permission);
+            if ($permissionArr) {
+
+                foreach ($permissionArr as $key => $permissionId) {
+                    $userHasPer[] = [
+                        'user_id' => $user->id,
+                        'permission_id' => $permissionId,
+                    ];
+                }
+                userHasPermission::insert($userHasPer);
+            }
 
             $data = [
                 'status' => true,
