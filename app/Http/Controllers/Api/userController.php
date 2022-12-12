@@ -165,16 +165,17 @@ class userController extends Controller
             $user->gender = $request->gender;
             $user->image = $filename;
             $user->save();
-            $userHasPerDel = userHasPermission::where('user_id', $user->id)->get();
+
 
             
+            $userHasPerDel = userHasPermission::where('user_id', $user->id)->get();
             foreach ($userHasPerDel as $key => $value) {
                 $value->delete();
             }
 
             $permissionArr = json_decode($request->permission);
-            if ($permissionArr) {
 
+            if ($permissionArr) {
                 foreach ($permissionArr as $key => $permissionId) {
                     $userHasPer[] = [
                         'user_id' => $user->id,
