@@ -135,6 +135,12 @@ class catagoryController extends Controller
         // return response($request);
 
         try {
+            $request->validate([
+                'name' => 'required',
+                'description' => 'required',
+                'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg',
+            ]);
+
             $catagory = catagory::findOrFail($id);
             $destination = public_path("storage\\" . $catagory->image);
             $filename = "";

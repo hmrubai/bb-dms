@@ -74,7 +74,7 @@ class documentController extends Controller
                 'status' => true,
                 'message' => 'Document created successfully.',
                 'status code' => 200,
-                'data' => $document,
+                // 'data' => $document,
             ];
             return response()->json($data);
         } catch (\Throwable $th) {
