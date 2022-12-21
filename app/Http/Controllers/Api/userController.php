@@ -140,11 +140,7 @@ class userController extends Controller
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email,' . $user->id,
                 // 'username' => 'required',
-                'password' => [
-                    'required',
-                    'min:6',
-                    'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
-                ],
+ 
             ]);
             $destination = public_path("storage\\" . $user->image);
             $filename = "";
@@ -160,7 +156,7 @@ class userController extends Controller
             $user->email = $request->email;
             $user->username = $request->username;
             $user->number = $request->number;
-            $user->password = bcrypt($request->password);
+
             $user->status = $request->status;
             $user->gender = $request->gender;
             $user->image = $filename;
