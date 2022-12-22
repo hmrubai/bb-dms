@@ -98,18 +98,22 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $user = User::where('email', $request->email)->first();
-          
+            $user = User::where('email', $request->email)->with("userHasPermission", 'userHasPermission.permission')->first();
+
+
+
+
+
+
             $data = [
                 'status' => true,
                 'message' => 'User Logged In Successfully',
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
                 'status code' => 200,
-                'user'=>$user
+                'user' => $user
             ];
 
-         return response()->json([$data]);
-
+            return response()->json([$data]);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -117,8 +121,4 @@ class AuthController extends Controller
             ], 500);
         }
     }
-
-  
-
-
 }
