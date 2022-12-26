@@ -17,7 +17,7 @@ class userController extends Controller
      */
     public function index()
     {
-        $data = User::paginate(5);
+        $data = User::where('id', '!=', 1)->paginate(5);
         return response()->json($data);
     }
 
