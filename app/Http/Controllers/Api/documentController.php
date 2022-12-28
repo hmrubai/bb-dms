@@ -19,8 +19,8 @@ class documentController extends Controller
      */
     public function index()
     {
-        $authId=Auth::user()->id;
-        $data = document::where('user_id','=', $authId)->get();
+        $authId = Auth::user()->id;
+        $data = document::where('user_id', '=', $authId)->get();
         return response()->json($data);
     }
 
@@ -119,13 +119,12 @@ class documentController extends Controller
      */
     public function update(Request $request, $id)
     {
-    
+
 
         try {
             $request->validate([
                 'name' => 'required',
                 'description' => 'required',
-                'file' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg',
             ]);
 
             $document = document::findOrFail($id);
@@ -139,12 +138,12 @@ class documentController extends Controller
 
                 $filename = $request->file('file')->store('file', 'public');
             } else {
-                $filename = $request->image;
+                $filename = $request->file;
             }
 
-            $document->name = $request->name;    
+            $document->name = $request->name;
             $document->description = $request->description;
-      
+            $document->status = $request->status;
             $document->file = $filename;
 
             $data = $document->save();
@@ -210,13 +209,13 @@ class documentController extends Controller
 
     {
 
-        $authId=Auth::user()->id;
-        
+        $authId = Auth::user()->id;
+
 
         $data = document::where('catagory_id', $id)
             ->where('sub_catagory_id', null)
             ->where('sub_sub_catagory_id', null)
-            ->where('user_id','=',$authId)
+            ->where('user_id', '=', $authId)
             ->with('user')->get();
 
         return response()->json($data);

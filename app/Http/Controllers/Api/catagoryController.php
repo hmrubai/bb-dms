@@ -32,7 +32,10 @@ class catagoryController extends Controller
     public function allCategory()
     {
         $authId=Auth::user()->id;
-        $data = catagory::where("user_id","=", $authId)->get();
+        $data = catagory::
+        where("user_id","=", $authId)
+        // ->where("status","=","Active")
+        ->get();
         ;
         return response()->json($data);
     }
