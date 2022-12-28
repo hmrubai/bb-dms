@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\catagory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 
@@ -17,7 +18,10 @@ class catagoryController extends Controller
      */
     public function index()
     {
-        $data = catagory::with('user')->paginate(5);
+        $authId=Auth::user()->id;
+        $data = catagory::
+        where("user_id","=", $authId)
+       -> with('user')->paginate(5);
         return response()->json($data);
     }
 
@@ -27,7 +31,9 @@ class catagoryController extends Controller
 
     public function allCategory()
     {
-        $data = catagory::all();
+        $authId=Auth::user()->id;
+        $data = catagory::where("user_id","=", $authId)->get();
+        ;
         return response()->json($data);
     }
 
@@ -98,6 +104,13 @@ class catagoryController extends Controller
         return response()->json($data);
     }
 
+    
+    public function categoryList(Request $request)
+    {
+        $data = catagory::all();
+        return response()->json($data);
+    }
+
        /**
      * Display the specified resource.
      *
@@ -106,7 +119,14 @@ class catagoryController extends Controller
      */
     public function showSubCatagory($id)
     {
-        $data = catagory::with('subCatagory')->with('subSubCatagory')->find($id);
+        $authId=Auth::user()->id;
+
+        $data = catagory::where("user_id","=", $authId)
+
+        ->with('subCatagory')
+        ->with('subSubCatagory')
+        ->find($id);
+        
         return response()->json($data);
     }
 

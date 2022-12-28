@@ -32,20 +32,6 @@ use App\Models\permission;
 // });
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    // Route::get('/catagory',[catagoryController::class,'index']);
-});
-
-
-
-Route::get('/test', function () {
-    return "hello";
-})->middleware('auth:sanctum');
-
-
-//Authentaction
-Route::post('/auth/register', [AuthController::class, 'createUser']);
-Route::post('/auth/login', [AuthController::class, 'loginUser']);
-
 // user api
 Route::get('/users', [userController::class, 'index']);
 Route::post('/users', [userController::class, 'store']);
@@ -91,6 +77,9 @@ Route::post('/document/{id}', [documentController::class, 'update']);
 Route::delete('/document/{id}', [documentController::class, 'destroy']);
 Route::get('/document_show/{id}', [documentController::class, 'showDocument']);
 Route::get('/category_document/{id}', [documentController::class, 'showCategoryDocument']);
+Route::get ('download/{id}',[documentController::class,'download']);
+
+//show document
 Route::get('/show_sub_category/{id}', [documentController::class, 'showSubCategory']);
 Route::get('/show_sub_category_document/{id}', [documentController::class, 'showSubCategoryDocument']);
 Route::get('/show_sub_sub_category/{id}', [documentController::class, 'showSubSubCategory']);
@@ -115,3 +104,14 @@ Route::post('/role_has_permission/{id}', [roleHasPermissionController::class, 'u
 
 //userHasRole
 Route::post('/user_has_role', [userHasRolesController::class, 'store']);
+
+});
+
+
+
+
+
+//Authentaction
+Route::post('/auth/register', [AuthController::class, 'createUser']);
+Route::post('/auth/login', [AuthController::class, 'loginUser']);
+

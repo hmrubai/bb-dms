@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\sub_catagory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class subCatagoryController extends Controller
@@ -16,8 +17,9 @@ class subCatagoryController extends Controller
      */
     public function index()
     {
-
-        $data = sub_catagory::with('catagory')->with('user')->paginate(5);
+        $authId=Auth::user()->id;
+        $data = sub_catagory::where("user_id","=", $authId)
+        ->with('catagory')->with('user')->paginate(5);
         return response()->json($data);
     }
 

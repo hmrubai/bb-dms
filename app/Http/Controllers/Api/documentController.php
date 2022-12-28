@@ -7,6 +7,7 @@ use App\Models\document;
 use App\Models\sub_catagory;
 use App\Models\sub_sub_catagory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class documentController extends Controller
@@ -18,7 +19,8 @@ class documentController extends Controller
      */
     public function index()
     {
-        $data = document::all();
+        $authId=Auth::user()->id;
+        $data = document::where('user_id','=', $authId)->get();
         return response()->json($data);
     }
 
@@ -117,10 +119,18 @@ class documentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            $document = document::findOrFail($id);
+    
 
+        try {
+            $request->validate([
+                'name' => 'required',
+                'description' => 'required',
+                'file' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg',
+            ]);
+
+            $document = document::findOrFail($id);
             $destination = public_path("storage\\" . $document->file);
+
             $filename = "";
             if ($request->hasFile('file')) {
                 if (File::exists($destination)) {
@@ -132,14 +142,9 @@ class documentController extends Controller
                 $filename = $request->image;
             }
 
-            $document->name = $request->name;
-            $document->user_id = $request->user_id;
-            $document->catagory_id = $request->catagory_id;
-            $document->sub_catagory_id = $request->sub_catagory_id;
-            $document->sub_sub_catagory_id = $request->sub_sub_catagory_id;
+            $document->name = $request->name;    
             $document->description = $request->description;
-            $document->admin_status = $request->admin_status;
-            $document->status = $request->status;
+      
             $document->file = $filename;
 
             $data = $document->save();
@@ -202,10 +207,16 @@ class documentController extends Controller
 
 
     public function showCategoryDocument($id)
+
     {
+
+        $authId=Auth::user()->id;
+        
+
         $data = document::where('catagory_id', $id)
             ->where('sub_catagory_id', null)
             ->where('sub_sub_catagory_id', null)
+            ->where('user_id','=',$authId)
             ->with('user')->get();
 
         return response()->json($data);
