@@ -78,6 +78,8 @@ Route::delete('/document/{id}', [documentController::class, 'destroy']);
 Route::get('/document_show/{id}', [documentController::class, 'showDocument']);
 Route::get('/category_document/{id}', [documentController::class, 'showCategoryDocument']);
 Route::get ('download/{id}',[documentController::class,'download']);
+Route::post ('document_publish/{id}',[documentController::class,'documentPublish']);
+
 
 //show document
 Route::get('/show_sub_category/{id}', [documentController::class, 'showSubCategory']);
