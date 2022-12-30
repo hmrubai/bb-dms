@@ -77,8 +77,12 @@ Route::post('/document/{id}', [documentController::class, 'update']);
 Route::delete('/document/{id}', [documentController::class, 'destroy']);
 Route::get('/document_show/{id}', [documentController::class, 'showDocument']);
 Route::get('/category_document/{id}', [documentController::class, 'showCategoryDocument']);
+
 Route::get ('download/{id}',[documentController::class,'download']);
 Route::post ('document_publish/{id}',[documentController::class,'documentPublish']);
+
+Route::get('adminunpublish_document_list',[documentController::class,'AdminUnpubishDocumentList']);
+
 
 
 //show document
@@ -112,7 +116,7 @@ Route::post('/user_has_role', [userHasRolesController::class, 'store']);
 
 
 
-
+Route::post ('admin_document_publish/{id}',[documentController::class,'AdminPublishDocument']);
 //Authentaction
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);

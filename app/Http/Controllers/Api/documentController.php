@@ -260,6 +260,27 @@ class documentController extends Controller
         return response()->json($data);
     }
 
+    public function AdminUnpubishDocumentList()
+    {
+        $data = document::where('admin_status', 'Pending')->with('user')->get();
+        return response()->json($data);
+    }
+
+  public function AdminPublishDocument($id)
+  {
+        $data =document::findOrfail($id);
+        $data->admin_status = "Active";
+        $data->save();
+        $data = [
+            'status' => true,
+            'message' => 'Document Publish Successfully.',
+            'status code' => 200,
+        ];
+        return response()->json($data);
+
+
+
+  }
 
 
 
