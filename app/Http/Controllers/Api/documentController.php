@@ -95,7 +95,7 @@ class documentController extends Controller
      */
     public function show($id)
     {
-        $data = document::find($id);
+        $data = document::with('user')->find($id);
         return response()->json($data);
     }
 
@@ -262,7 +262,10 @@ class documentController extends Controller
 
     public function AdminUnpubishDocumentList()
     {
-        $data = document::where('admin_status', 'Pending')->with('user')->get();
+        $data = document::where('admin_status', 'Pending')
+        ->where('status','Active')
+        ->with('user')
+        ->get();
         return response()->json($data);
     }
 
@@ -278,8 +281,15 @@ class documentController extends Controller
         ];
         return response()->json($data);
 
+  }
 
-
+  public function AllPublishDocument()
+  {
+      $data = document::where('admin_status', 'Active')
+      ->where('status','Active')
+      ->with('user')
+      ->get();
+      return response()->json($data);
   }
 
 
