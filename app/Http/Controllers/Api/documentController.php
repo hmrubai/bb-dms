@@ -216,7 +216,9 @@ class documentController extends Controller
             ->where('sub_catagory_id', null)
             ->where('sub_sub_catagory_id', null)
             ->where('user_id', '=', $authId)
-            ->with('user')->get();
+            ->with('user')
+            ->with('catagory')
+            ->get();
 
         return response()->json($data);
     }
@@ -231,7 +233,9 @@ class documentController extends Controller
     {
         $data = document::where('sub_catagory_id', $id)
             ->where('sub_sub_catagory_id', null)
-            ->with('user')->with('catagory')->get();
+            ->with('user')
+            ->with('catagory')
+            ->get();
         return response()->json($data);
     }
     public function showSubSubCategory($id)
@@ -292,6 +296,13 @@ class documentController extends Controller
       return response()->json($data);
   }
 
+  Public function yourDocument()
+  {
+      $authId = Auth::user()->id;
+      $data = document::where('user_id', $authId)
+      ->get();
+      return response()->json($data);
+  }
 
 
    
