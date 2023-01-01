@@ -82,6 +82,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('adminunpublish_document_list', [documentController::class, 'AdminUnpubishDocumentList']);
     Route::get('all_publish_document', [documentController::class, 'AllPublishDocument']);
     Route::get('your_document', [documentController::class, 'yourDocument']);
+    Route::get('dashboard_Publish_Document', [documentController::class, 'dashboardPublishDocument']);
 
 
 

@@ -18,7 +18,11 @@ class subSubCatagoryController extends Controller
     {
         $authId=Auth::user()->id;
         $data = sub_sub_catagory::where("user_id","=", $authId)
-        ->with('catagory')->with('user')->with('subCatagory')->paginate(5);
+        ->with('catagory')
+        ->with('user')
+        ->with('subCatagory')
+           ->latest()
+        ->paginate(5);
         return response()->json($data);
     }
 

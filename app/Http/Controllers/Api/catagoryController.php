@@ -21,7 +21,9 @@ class catagoryController extends Controller
         $authId=Auth::user()->id;
         $data = catagory::
         where("user_id","=", $authId)
-       -> with('user')->paginate(5);
+       -> with('user')
+       ->latest()
+       ->paginate(5);
         return response()->json($data);
     }
 

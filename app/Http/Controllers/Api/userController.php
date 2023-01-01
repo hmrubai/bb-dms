@@ -17,13 +17,16 @@ class userController extends Controller
      */
     public function index()
     {
-        $data = User::where('id', '!=', 1)->paginate(5);
+        $data = User::where('id', '!=', 1)
+        ->latest()
+        ->paginate(5);
         return response()->json($data);
     }
 
     public function allUser()
     {
-        $data = User::with('userHasPermission', 'userHasPermission.permission')->get();
+        $data = User::with('userHasPermission', 'userHasPermission.permission')
+        ->get();
         return response()->json($data);
     }
 

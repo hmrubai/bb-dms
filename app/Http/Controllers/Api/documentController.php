@@ -51,8 +51,7 @@ class documentController extends Controller
                 'sub_catagory_id' => 'nullable',
                 'sub_sub_catagory_id' => 'nullable',
                 'description' => 'nullable',
-
-                'file' => 'required|mimes:csv,txt,xlx,xls,pdf,docx,doc,jpg,png,jpeg,gif,svg',
+                'file' => 'required|mimes:csv,txt,xlx,xls,xlsx,pdf,docx,doc,jpg,png,jpeg,gif,svg',
             ]);
 
             $filename = "";
@@ -68,7 +67,7 @@ class documentController extends Controller
             $document->sub_sub_catagory_id = $request->sub_sub_catagory_id;
             $document->description = $request->description;
             // $document->admin_status = $request->admin_status;
-   
+
             $document->file = $filename;
             $document->save();
 
@@ -218,6 +217,7 @@ class documentController extends Controller
             ->where('user_id', '=', $authId)
             ->with('user')
             ->with('catagory')
+            ->latest()
             ->get();
 
         return response()->json($data);
@@ -225,7 +225,9 @@ class documentController extends Controller
 
     public function showSubCategory($id)
     {
-        $data = sub_catagory::where('catagory_id', $id)->with('document')->get();
+        $data = sub_catagory::where('catagory_id', $id)
+            ->with('document')
+            ->get();
         return response()->json($data);
     }
 
@@ -235,19 +237,25 @@ class documentController extends Controller
             ->where('sub_sub_catagory_id', null)
             ->with('user')
             ->with('catagory')
+            ->latest()
             ->get();
         return response()->json($data);
     }
     public function showSubSubCategory($id)
     {
-        $data = sub_sub_catagory::where('sub_catagory_id', $id)->with('document')->get();
+        $data = sub_sub_catagory::where('sub_catagory_id', $id)
+            ->with('document')
+            ->get();
         return response()->json($data);
     }
     public function showSubSubCategoryDocument($id)
     {
         $data = document::where('sub_sub_catagory_id', $id)
 
-            ->with('user')->with('catagory')->get();
+            ->with('user')
+            ->with('catagory')
+            ->latest()
+            ->get();
         return response()->json($data);
     }
 
@@ -267,15 +275,16 @@ class documentController extends Controller
     public function AdminUnpubishDocumentList()
     {
         $data = document::where('admin_status', 'Pending')
-        ->where('status','Active')
-        ->with('user')
-        ->get();
+            ->where('status', 'Active')
+            ->with('user')
+            ->latest()
+            ->get();
         return response()->json($data);
     }
 
-  public function AdminPublishDocument($id)
-  {
-        $data =document::findOrfail($id);
+    public function AdminPublishDocument($id)
+    {
+        $data = document::findOrfail($id);
         $data->admin_status = "Active";
         $data->save();
         $data = [
@@ -284,26 +293,47 @@ class documentController extends Controller
             'status code' => 200,
         ];
         return response()->json($data);
+    }
 
-  }
+    public function AllPublishDocument(Request $request)
+    {
 
-  public function AllPublishDocument()
-  {
-      $data = document::where('admin_status', 'Active')
-      ->where('status','Active')
-      ->with('user')
-      ->get();
-      return response()->json($data);
-  }
-
-  Public function yourDocument()
-  {
-      $authId = Auth::user()->id;
-      $data = document::where('user_id', $authId)
-      ->get();
-      return response()->json($data);
-  }
+        if ($request->search) {
+            $data = document::where('admin_status', 'Active')
+                ->where('status', 'Active')
+                ->where('name', 'like', '%' . $request->search . '%')
+                ->with('user')
+                ->get();
+            return response()->json($data);
+        }
 
 
-   
+        $data = document::where('admin_status', 'Active')
+            ->where('status', 'Active')
+            ->with('user')
+            ->latest()
+            ->get();
+        return response()->json($data);
+    }
+
+    public function yourDocument()
+    {
+        $authId = Auth::user()->id;
+        $data = document::where('user_id', $authId)
+            ->get();
+        return response()->json($data);
+    }
+
+    public function dashboardPublishDocument(Request $request)
+    {
+
+
+        $data = document::where('admin_status', 'Active')
+            ->where('status', 'Active')
+            ->with('user')
+            ->latest()
+            ->paginate(10);
+
+        return response()->json($data);
+    }
 }
