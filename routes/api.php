@@ -84,7 +84,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('your_document', [documentController::class, 'yourDocument']);
     Route::get('dashboard_Publish_Document', [documentController::class, 'dashboardPublishDocument']);
 
-
+    Route::post('admin_document_publish/{id}', [documentController::class, 'AdminPublishDocument']);
 
     //show document
     Route::get('/show_sub_category/{id}', [documentController::class, 'showSubCategory']);
@@ -116,7 +116,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
 
-Route::post('admin_document_publish/{id}', [documentController::class, 'AdminPublishDocument']);
+
 //Authentaction
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
