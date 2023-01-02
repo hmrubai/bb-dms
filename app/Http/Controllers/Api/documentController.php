@@ -55,8 +55,9 @@ class documentController extends Controller
             ]);
 
             $filename = "";
-            if ($request->hasFile('file')) {
-                $filename = $request->file('file')->store('file', 'public');
+            if ($image = $request->file('file')) {
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('file'), $filename);
             } else {
                 $filename = Null;
             }
@@ -66,8 +67,6 @@ class documentController extends Controller
             $document->sub_catagory_id = $request->sub_catagory_id;
             $document->sub_sub_catagory_id = $request->sub_sub_catagory_id;
             $document->description = $request->description;
-            // $document->admin_status = $request->admin_status;
-
             $document->file = $filename;
             $document->save();
 
@@ -125,17 +124,18 @@ class documentController extends Controller
                 'name' => 'required',
                 'description' => 'required',
             ]);
-
-            $document = document::findOrFail($id);
-            $destination = public_path("storage\\" . $document->file);
-
             $filename = "";
-            if ($request->hasFile('file')) {
-                if (File::exists($destination)) {
-                    File::delete($destination);
+            $document = document::findOrFail($id);
+            $deleteOldImage = public_path("file\\" . $document->file);
+
+
+            if ($image = $request->file('file')) {
+                if (File::exists($deleteOldImage)) {
+                    File::delete($deleteOldImage);
                 }
 
-                $filename = $request->file('file')->store('file', 'public');
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('file'), $filename);
             } else {
                 $filename = $request->file;
             }
@@ -174,9 +174,9 @@ class documentController extends Controller
     {
         try {
             $document = document::findOrFail($id);
-            $destination = public_path("storage\\" . $document->file);
-            if (File::exists($destination)) {
-                File::delete($destination);
+            $deleteImage = public_path("file\\" . $document->file);
+            if (File::exists($deleteImage)) {
+                File::delete($deleteImage);
             }
             $result = $document->delete();
             $data = [
@@ -196,7 +196,7 @@ class documentController extends Controller
     public function download($id)
     {
         $document = document::findOrFail($id);
-        $file = public_path("storage\\" . $document->file);
+        $file = public_path("file\\" . $document->file);
         $headers = array(
             'Content-Type: application/pdf',
         );

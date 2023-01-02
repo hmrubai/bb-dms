@@ -17,15 +17,15 @@ class subCatagoryController extends Controller
      */
     public function index()
     {
-        $authId=Auth::user()->id;
-        $data = sub_catagory::where("user_id","=", $authId)
-        ->with('catagory')->with('user')
-        ->latest()
-        ->paginate(5);
+        $authId = Auth::user()->id;
+        $data = sub_catagory::where("user_id", "=", $authId)
+            ->with('catagory')->with('user')
+            ->latest()
+            ->paginate(5);
         return response()->json($data);
     }
 
- 
+
 
     /**
      * Show the form for creating a new resource.
@@ -46,7 +46,7 @@ class subCatagoryController extends Controller
     public function store(Request $request)
     {
 
-      
+
 
         try {
             $subCatagory = new sub_catagory();
@@ -55,16 +55,17 @@ class subCatagoryController extends Controller
                 'user_id' => 'required',
                 'catagory_id' => 'required',
                 'description' => 'required',
-                
                 'image' => 'image|mimes:jpg,png,jpeg,gif,svg',
             ]);
 
             $filename = "";
-            if ($request->hasFile('image')) {
-                $filename = $request->file('image')->store('images', 'public');
+            if ($image = $request->file('image')) {
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $filename);
             } else {
                 $filename = Null;
             }
+
             $subCatagory->name = $request->name;
             $subCatagory->user_id = $request->user_id;
             $subCatagory->catagory_id = $request->catagory_id;
@@ -95,11 +96,11 @@ class subCatagoryController extends Controller
      */
     public function show($id)
     {
-       
+
         $data = sub_catagory::with('catagory')->with('user')->find($id);
         return response()->json($data);
     }
-        /**
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -107,12 +108,12 @@ class subCatagoryController extends Controller
      */
     public function showSubSubCatagory($id)
     {
-       
+
         $data = sub_catagory::with('SubSubCatagory')->with('user')->find($id);
         return response()->json($data);
     }
-    
-    
+
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -136,15 +137,17 @@ class subCatagoryController extends Controller
     {
         try {
             $subCatagory = sub_catagory::findOrFail($id);
-
-            $destination = public_path("storage\\" . $subCatagory->image);
             $filename = "";
-            if ($request->hasFile('image')) {
+
+            $destination = public_path("images\\" . $subCatagory->image);
+
+            if ($image = $request->file('image')) {
                 if (File::exists($destination)) {
                     File::delete($destination);
                 }
 
-                $filename = $request->file('image')->store('images', 'public');
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $filename);
             } else {
                 $filename = $request->image;
             }
@@ -182,9 +185,9 @@ class subCatagoryController extends Controller
     {
         try {
             $subCatagory = sub_catagory::findOrFail($id);
-            $destination = public_path("storage\\" . $subCatagory->image);
-            if (File::exists($destination)) {
-                File::delete($destination);
+            $deleteImage = public_path("images\\" . $subCatagory->image);
+            if (File::exists($deleteImage)) {
+                File::delete($deleteImage);
             }
             $result = $subCatagory->delete();
             $data = [

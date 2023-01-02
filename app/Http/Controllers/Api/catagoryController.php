@@ -68,11 +68,13 @@ class catagoryController extends Controller
             ]);
 
             $filename = "";
-            if ($request->hasFile('image')) {
-                $filename = $request->file('image')->store('images', 'public');
+            if ($image = $request->file('image')) {
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $filename);
             } else {
                 $filename = Null;
             }
+
             $catagory->name = $request->name;
             $catagory->user_id = $request->user_id;
             $catagory->description = $request->description;
@@ -160,18 +162,19 @@ class catagoryController extends Controller
             $request->validate([
                 'name' => 'required',
                 'description' => 'required',
-                'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg',
+            
             ]);
-
-            $catagory = catagory::findOrFail($id);
-            $destination = public_path("storage\\" . $catagory->image);
             $filename = "";
-            if ($request->hasFile('image')) {
+            $catagory = catagory::findOrFail($id);
+            $destination = public_path("images\\" . $catagory->image);
+           
+            if ($image = $request->file('image')) {
                 if (File::exists($destination)) {
                     File::delete($destination);
                 }
 
-                $filename = $request->file('image')->store('images', 'public');
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $filename);
             } else {
                 $filename = $request->image;
             }
@@ -210,9 +213,9 @@ class catagoryController extends Controller
     {
         try {
             $catagory = catagory::findOrFail($id);
-            $destination = public_path("storage\\" . $catagory->image);
-            if (File::exists($destination)) {
-                File::delete($destination);
+            $deleteImage = public_path("images\\" . $catagory->image);
+            if (File::exists($deleteImage)) {
+                File::delete($deleteImage);
             }
             $result = $catagory->delete();
             $data = [

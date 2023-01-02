@@ -57,8 +57,9 @@ class subSubCatagoryController extends Controller
             ]);
 
             $filename = "";
-            if ($request->hasFile('image')) {
-                $filename = $request->file('image')->store('images', 'public');
+            if ($image = $request->file('image')) {
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $filename);
             } else {
                 $filename = Null;
             }
@@ -119,34 +120,34 @@ class subSubCatagoryController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $subCatagory = sub_sub_catagory::findOrFail($id);
+            $subSubCatagory = sub_sub_catagory::findOrFail($id);
 
-            $destination = public_path("storage\\" . $subCatagory->image);
-            $filename = "";
-            if ($request->hasFile('image')) {
+            $destination = public_path("images\\" . $subSubCatagory->image);
+
+            if ($image = $request->file('image')) {
                 if (File::exists($destination)) {
                     File::delete($destination);
                 }
 
-                $filename = $request->file('image')->store('images', 'public');
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $filename);
             } else {
                 $filename = $request->image;
             }
 
-            $subCatagory->name = $request->name;
-            // $subCatagory->user_id = $request->user_id;
-            // $subCatagory->catagory_id = $request->catagory_id;
-            $subCatagory->description = $request->description;
-            $subCatagory->status = $request->status;
-            $subCatagory->image = $filename;
-            $data = $subCatagory->save();
+
+            $subSubCatagory->name = $request->name;
+            $subSubCatagory->description = $request->description;
+            $subSubCatagory->status = $request->status;
+            $subSubCatagory->image = $filename;
+            $data = $subSubCatagory->save();
 
 
             $data = [
                 'status' => true,
                 'message' => 'Sub Sub Catagory Update Successfully.',
                 'status code' => 200,
-                'data' => $subCatagory,
+                'data' => $subSubCatagory,
             ];
 
             return response()->json($data);
@@ -168,9 +169,9 @@ class subSubCatagoryController extends Controller
     {
         try {
             $catagory = sub_sub_catagory::findOrFail($id);
-            $destination = public_path("storage\\" . $catagory->image);
-            if (File::exists($destination)) {
-                File::delete($destination);
+            $deleteImage = public_path("images\\" . $catagory->image);
+            if (File::exists($deleteImage)) {
+                File::delete($deleteImage);
             }
             $result = $catagory->delete();
             $data = [

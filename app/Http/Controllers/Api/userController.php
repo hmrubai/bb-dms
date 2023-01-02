@@ -64,10 +64,16 @@ class userController extends Controller
                 'number' => 'required',
             ]);
 
-            $filename = null;
-            if ($request->hasFile('image')) {
-                $filename = $request->file('image')->store('images', 'public');
+
+            $filename = "";
+            if ($image = $request->file('image')) {
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $filename);
+            } else {
+                $filename = Null;
             }
+
+
             $user->name = $request->name;
             $user->email = $request->email;
             $user->username = $request->username;
@@ -145,21 +151,28 @@ class userController extends Controller
                 // 'username' => 'required',
  
             ]);
-            $destination = public_path("storage\\" . $user->image);
+
+            
             $filename = "";
-            if ($request->hasFile('image')) {
+         
+            $destination = public_path("images\\" . $user->image);
+           
+            if ($image = $request->file('image')) {
                 if (File::exists($destination)) {
                     File::delete($destination);
                 }
-                $filename = $request->file('image')->store('images', 'public');
+
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $filename);
             } else {
                 $filename = $request->image;
             }
+
+
             $user->name = $request->name;
             $user->email = $request->email;
             $user->username = $request->username;
             $user->number = $request->number;
-
             $user->status = $request->status;
             $user->gender = $request->gender;
             $user->image = $filename;
@@ -209,12 +222,12 @@ class userController extends Controller
     public function destroy($id)
     {
         try {
-            $catagory = User::findOrFail($id);
-            $destination = public_path("storage\\" . $catagory->image);
-            if (File::exists($destination)) {
-                File::delete($destination);
+            $user= User::findOrFail($id);
+            $deleteImage = public_path("images\\" . $user->image);
+            if (File::exists($deleteImage)) {
+                File::delete($deleteImage);
             }
-            $result = $catagory->delete();
+            $result = $user->delete();
             $data = [
                 'status' => true,
                 'message' => 'User Delate Successfully.',
