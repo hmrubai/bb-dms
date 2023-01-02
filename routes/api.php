@@ -26,10 +26,15 @@ use App\Models\permission;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
+Route::get('storage-link', function () {
+    $targetFolder = public_path('app/public');
+    $linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/storage';
+    symlink($linkFolder, $targetFolder);
+    return 'The [public/storage] folder has been linked';
+});
 
-// });
+
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     // user api
@@ -83,7 +88,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('all_publish_document', [documentController::class, 'AllPublishDocument']);
     Route::get('your_document', [documentController::class, 'yourDocument']);
     Route::get('dashboard_Publish_Document', [documentController::class, 'dashboardPublishDocument']);
-
     Route::post('admin_document_publish/{id}', [documentController::class, 'AdminPublishDocument']);
 
     //show document

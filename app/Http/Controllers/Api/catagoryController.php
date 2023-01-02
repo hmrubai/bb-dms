@@ -18,27 +18,24 @@ class catagoryController extends Controller
      */
     public function index()
     {
-        $authId=Auth::user()->id;
-        $data = catagory::
-        where("user_id","=", $authId)
-       -> with('user')
-       ->latest()
-       ->paginate(5);
+        $authId = Auth::user()->id;
+        $data = catagory::where("user_id", "=", $authId)
+            ->with('user')
+            ->latest()
+            ->paginate(5);
         return response()->json($data);
     }
 
- 
+
 
 
 
     public function allCategory()
     {
-        $authId=Auth::user()->id;
-        $data = catagory::
-        where("user_id","=", $authId)
-        // ->where("status","=","Active")
-        ->get();
-        ;
+        $authId = Auth::user()->id;
+        $data = catagory::where("user_id", "=", $authId)
+            // ->where("status","=","Active")
+            ->get();;
         return response()->json($data);
     }
 
@@ -62,7 +59,7 @@ class catagoryController extends Controller
 
         try {
             $catagory = new catagory();
-            
+
             $request->validate([
                 'name' => 'required',
                 'user_id' => 'required',
@@ -109,14 +106,14 @@ class catagoryController extends Controller
         return response()->json($data);
     }
 
-    
+
     public function categoryList(Request $request)
     {
         $data = catagory::all();
         return response()->json($data);
     }
 
-       /**
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -124,14 +121,14 @@ class catagoryController extends Controller
      */
     public function showSubCatagory($id)
     {
-        $authId=Auth::user()->id;
+        $authId = Auth::user()->id;
 
-        $data = catagory::where("user_id","=", $authId)
+        $data = catagory::where("user_id", "=", $authId)
 
-        ->with('subCatagory')
-        ->with('subSubCatagory')
-        ->find($id);
-        
+            ->with('subCatagory')
+            ->with('subSubCatagory')
+            ->find($id);
+
         return response()->json($data);
     }
 
