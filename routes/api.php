@@ -5,14 +5,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\catagoryController;
 use App\Http\Controllers\Api\documentController;
-use App\Http\Controllers\api\permissionController;
-use App\Http\Controllers\api\roleController;
-use App\Http\Controllers\api\roleHasPermissionController;
-use App\Http\Controllers\api\subCatagoryController;
+use App\Http\Controllers\Api\permissionController;
+use App\Http\Controllers\Api\roleController;
+use App\Http\Controllers\Api\roleHasPermissionController;
+use App\Http\Controllers\Api\subCatagoryController;
 use App\Http\Controllers\Api\subSubCatagoryController;
-use App\Http\Controllers\api\userController;
-use App\Http\Controllers\api\userHasPermissionController;
-use App\Http\Controllers\api\userHasRolesController;
+use App\Http\Controllers\Api\userController;
+use App\Http\Controllers\Api\userHasPermissionController;
+use App\Http\Controllers\Api\userHasRolesController;
 use App\Models\permission;
 
 /*

@@ -126,7 +126,7 @@ class documentController extends Controller
             ]);
             $filename = "";
             $document = document::findOrFail($id);
-            $deleteOldImage = public_path("file\\" . $document->file);
+            $deleteOldImage = public_path("file" . $document->file);
 
 
             if ($image = $request->file('file')) {
@@ -193,15 +193,20 @@ class documentController extends Controller
         }
     }
 
+
     public function download($id)
     {
         $document = document::findOrFail($id);
-        $file = public_path("file\\" . $document->file);
+        $file = public_path("file" . $document->file);
         $headers = array(
             'Content-Type: application/pdf',
         );
         return response()->download($file, $document->name, $headers);
     }
+
+
+
+
 
 
     public function showCategoryDocument($id)
