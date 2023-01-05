@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
-use App\Models\userHasPermission;
-use Illuminate\Foundation\Auth\User;
+use App\Models\Group;
 use Illuminate\Http\Request;
 
-class userHasPermissionController extends Controller
+class groupController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -38,20 +37,40 @@ class userHasPermissionController extends Controller
     public function store(Request $request)
     {
         try {
+            $group= new Group();
 
+            $request->validate([
+                'name' => 'required',
+                'user_id' => 'required',
+                'description' => 'required',
+                'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg',
+            ]);
 
-            foreach ($request->permission_id as $key => $permissionId) {
-                $userHasPer[] = [
-                    'user_id' => $request->user_id,
-                    'permission_id' => $permissionId,
-                ];
+            $filename = "";
+            if ($image = $request->file('image')) {
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $filename);
+            } else {
+                $filename = Null;
             }
 
-            userHasPermission::insert($userHasPer);
+            $group->name = $request->name;
+            $group->user_id = $request->user_id;
+            $group->description = $request->description;
+            $group->image = $filename;
+            $group->save();
 
-            return response()->json(['message' => 'Permission Assigned Successfully']);
+            $data = [
+                'status' => true,
+                'message' => 'Group created successfully.',
+                'status code' => 200,
+            ];
+            return response()->json($data);
         } catch (\Throwable $th) {
-            return response()->json(['message' => $th->getMessage()]);
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
         }
     }
 
@@ -86,25 +105,7 @@ class userHasPermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try {
-            $userHasPerDel = userHasPermission::where('user_id', $id)->get();
-            foreach ($userHasPerDel as $key => $value) {
-                $value->delete();
-            }
-
-
-            foreach ($request->permission_id as $key => $permissionId) {
-                $userHasPer[] = [
-                    'user_id' => $request->user_id,
-                    'permission_id' => $permissionId,
-                ];
-            }
-
-            userHasPermission::insert($userHasPer);
-            return response()->json(['message' => 'Permission Assigned Successfully']);
-        } catch (\Throwable $th) {
-            return response()->json(['message' => $th->getMessage()]);
-        }
+        //
     }
 
     /**

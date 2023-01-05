@@ -53,7 +53,7 @@ class userController extends Controller
             $request->validate([
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email',
-                'username' => 'required',
+                'username' => 'required|min:4|unique:users,username',
                 'password' => [
                     'required',
                     'min:6',
@@ -136,19 +136,20 @@ class userController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $   
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
 
+        
         try {
 
             $user = User::findOrFail($id);
             $request->validate([
                 'name' => 'required',
                 'email' => 'required|email|unique:users,email,' . $user->id,
-                // 'username' => 'required',
+                'username' => 'required|min:4|unique:users,username,'.$user->id,
  
             ]);
 
