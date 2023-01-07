@@ -4,7 +4,9 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Group;
+use App\Models\Group_member;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class groupController extends Controller
 {
@@ -34,16 +36,19 @@ class groupController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function createGroup(Request $request)
     {
         try {
-            $group= new Group();
+            $authId = Auth::user()->id;
 
+            $group = new Group();
             $request->validate([
                 'name' => 'required',
-                'user_id' => 'required',
                 'description' => 'required',
+                'member' => 'required',
                 'image' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg',
+
+
             ]);
 
             $filename = "";
@@ -54,11 +59,31 @@ class groupController extends Controller
                 $filename = Null;
             }
 
+
             $group->name = $request->name;
-            $group->user_id = $request->user_id;
+            $group->user_id = $authId;
             $group->description = $request->description;
             $group->image = $filename;
             $group->save();
+
+            $groupArr = json_decode($request->member);
+
+            Group_member::create([
+                'group_id' => $group->id,
+                'user_id' => $authId,
+            ]);
+
+            if ($groupArr) {
+                foreach ($groupArr as $key => $userId) {
+                    $groupMember[] = [
+                        'group_id' => $group->id,
+                        'user_id' => $userId,
+                    ];
+                }
+                Group_member::insert($groupMember);
+            }
+
+
 
             $data = [
                 'status' => true,

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\userHasPermission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class userController extends Controller
@@ -27,6 +28,13 @@ class userController extends Controller
     {
         $data = User::with('userHasPermission', 'userHasPermission.permission')
         ->get();
+        return response()->json($data);
+    }
+    public function allUserforGroup()
+    {
+        $authId = Auth::user()->id;
+        $data = User::where('id', '!=',  $authId)
+        -> get();
         return response()->json($data);
     }
 
@@ -83,8 +91,8 @@ class userController extends Controller
             $user->gender = $request->gender;
             $user->image = $filename;
             $user->save();
-            $permissionArr = json_decode($request->permission);
 
+            $permissionArr = json_decode($request->permission);
             if ($permissionArr) {
                 // $permission_list = explode(",", $request->permission);
                 foreach ($permissionArr as $key => $permissionId) {
@@ -95,6 +103,7 @@ class userController extends Controller
                 }
                 userHasPermission::insert($userHasPer);
             }
+
             $data = [
                 'status' => true,
                 'message' => 'User created successfully.',

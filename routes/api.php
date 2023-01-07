@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\catagoryController;
 use App\Http\Controllers\Api\documentController;
+use App\Http\Controllers\api\groupController;
 use App\Http\Controllers\Api\permissionController;
 use App\Http\Controllers\Api\roleController;
 use App\Http\Controllers\Api\roleHasPermissionController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Api\subSubCatagoryController;
 use App\Http\Controllers\Api\userController;
 use App\Http\Controllers\Api\userHasPermissionController;
 use App\Http\Controllers\Api\userHasRolesController;
+
 use App\Models\permission;
 
 /*
@@ -82,7 +84,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/document/{id}', [documentController::class, 'destroy']);
     Route::get('/document_show/{id}', [documentController::class, 'showDocument']);
     Route::get('/category_document/{id}', [documentController::class, 'showCategoryDocument']);
- 
+
     Route::post('document_publish/{id}', [documentController::class, 'documentPublish']);
     Route::get('adminunpublish_document_list', [documentController::class, 'AdminUnpubishDocumentList']);
     Route::get('all_publish_document', [documentController::class, 'AllPublishDocument']);
@@ -115,6 +117,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //userHasRole
     Route::post('/user_has_role', [userHasRolesController::class, 'store']);
+
+    //group
+    Route::post('create_group', [groupController::class, 'createGroup']);
+    Route::get('all_user_for_group', [userController::class, 'allUserforGroup']);
 });
 
 
