@@ -174,7 +174,7 @@ class documentController extends Controller
     {
         try {
             $document = document::findOrFail($id);
-            $deleteImage = public_path("file\\" . $document->file);
+            $deleteImage = public_path("file" . $document->file);
             if (File::exists($deleteImage)) {
                 File::delete($deleteImage);
             }

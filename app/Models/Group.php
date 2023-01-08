@@ -17,4 +17,21 @@ class Group extends Model
         
     ];
 
+    public function group_member()
+    {
+        return $this->hasMany(Group_member::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsToMany(User::class, 'group_members', 'group_id', 'user_id');
+    }
+
+    public function group_file()
+    {
+        return $this->hasMany(Group_file::class);
+    }
+
+    
+
 }

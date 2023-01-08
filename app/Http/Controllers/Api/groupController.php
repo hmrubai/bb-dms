@@ -7,6 +7,8 @@ use App\Models\Group;
 use App\Models\Group_member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use PhpParser\Node\Stmt\TryCatch;
 
 class groupController extends Controller
 {
@@ -15,9 +17,28 @@ class groupController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function userWiseGroupView()
     {
-        //
+        try {
+         $authId = Auth::user()->id;
+            $member = Group_member::where('user_id', $authId)
+                ->with('group.user')
+                ->get();
+            $data = [
+                'status' => true,
+                'message' => 'Group list.',
+                'status code' => 200,
+                'data' => $member,
+            ];
+            return response()->json($data);
+
+            
+        }catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -139,8 +160,26 @@ class groupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroyGroup($id)
     {
-        //
+        try {
+            $group= Group::findOrFail($id);
+            $deleteImage = public_path("images" . $group->image);
+            if (File::exists($deleteImage)) {
+                File::delete($deleteImage);
+            }
+            $result = $group->delete();
+            $data = [
+                'status' => true,
+                'message' => 'Group Delate Successfully.',
+                'status code' => 200,
+            ];
+            return response()->json($data);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 }

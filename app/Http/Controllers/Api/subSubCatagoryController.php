@@ -122,7 +122,7 @@ class subSubCatagoryController extends Controller
         try {
             $subSubCatagory = sub_sub_catagory::findOrFail($id);
 
-            $destination = public_path("images\\" . $subSubCatagory->image);
+            $destination = public_path("images" . $subSubCatagory->image);
 
             if ($image = $request->file('image')) {
                 if (File::exists($destination)) {
@@ -169,7 +169,7 @@ class subSubCatagoryController extends Controller
     {
         try {
             $catagory = sub_sub_catagory::findOrFail($id);
-            $deleteImage = public_path("images\\" . $catagory->image);
+            $deleteImage = public_path("images" . $catagory->image);
             if (File::exists($deleteImage)) {
                 File::delete($deleteImage);
             }

@@ -57,6 +57,17 @@ class User extends Authenticatable
     public function userHasPermission(){
         return $this->hasMany(userHasPermission::class);
     }
+
+    public function group()
+    {
+        return $this->hasMany(group::class);
+    }
+
+    public function group_file()
+    {
+        return $this->hasMany(group_file::class);
+    }
+
  
 
 

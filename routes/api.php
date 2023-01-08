@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\catagoryController;
 use App\Http\Controllers\Api\documentController;
 use App\Http\Controllers\api\groupController;
+use App\Http\Controllers\api\groupFileController;
 use App\Http\Controllers\Api\permissionController;
 use App\Http\Controllers\Api\roleController;
 use App\Http\Controllers\Api\roleHasPermissionController;
@@ -120,10 +121,17 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //group
     Route::post('create_group', [groupController::class, 'createGroup']);
+ 
     Route::get('all_user_for_group', [userController::class, 'allUserforGroup']);
+    Route::delete('delete_group/{id}', [groupController::class, 'destroyGroup']);
+    Route::get('user_wise_group_view', [groupController::class, 'userWiseGroupView']);
+    //group document
+    Route::post('create_group_documnet', [groupFileController::class, 'createGroupDocumnent']);
+    Route::get('get_group_document/{id}', [groupFileController::class, 'getGroupDocument']);
+
 });
 
-
+   
 
 
 

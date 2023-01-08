@@ -165,7 +165,7 @@ class userController extends Controller
             
             $filename = "";
          
-            $destination = public_path("images\\" . $user->image);
+            $destination = public_path("images" . $user->image);
            
             if ($image = $request->file('image')) {
                 if (File::exists($destination)) {
@@ -233,7 +233,7 @@ class userController extends Controller
     {
         try {
             $user= User::findOrFail($id);
-            $deleteImage = public_path("images\\" . $user->image);
+            $deleteImage = public_path("images" . $user->image);
             if (File::exists($deleteImage)) {
                 File::delete($deleteImage);
             }

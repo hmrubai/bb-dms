@@ -166,7 +166,7 @@ class catagoryController extends Controller
             ]);
             $filename = "";
             $catagory = catagory::findOrFail($id);
-            $destination = public_path("images\\" . $catagory->image);
+            $destination = public_path("images" . $catagory->image);
            
             if ($image = $request->file('image')) {
                 if (File::exists($destination)) {
@@ -213,7 +213,7 @@ class catagoryController extends Controller
     {
         try {
             $catagory = catagory::findOrFail($id);
-            $deleteImage = public_path("images\\" . $catagory->image);
+            $deleteImage = public_path("images" . $catagory->image);
             if (File::exists($deleteImage)) {
                 File::delete($deleteImage);
             }

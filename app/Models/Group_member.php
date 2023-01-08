@@ -15,4 +15,9 @@ class Group_member extends Model
         'status',
         
     ];
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
 }
