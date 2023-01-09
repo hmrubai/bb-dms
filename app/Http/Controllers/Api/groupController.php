@@ -20,7 +20,7 @@ class groupController extends Controller
     public function userWiseGroupView()
     {
         try {
-         $authId = Auth::user()->id;
+            $authId = Auth::user()->id;
             $member = Group_member::where('user_id', $authId)
                 ->with('group.user')
                 ->get();
@@ -31,9 +31,7 @@ class groupController extends Controller
                 'data' => $member,
             ];
             return response()->json($data);
-
-            
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage()
@@ -126,8 +124,20 @@ class groupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function singalGroup ($id)
     {
+        $group = Group::where('id', $id)
+            ->with('user')
+            ->first();
+        
+
+        $data = [
+            'status' => true,
+            'message' => 'Group list.',
+            'status code' => 200,
+            'data' => $group,
+        ];
+        return response()->json($data);
         //
     }
 
@@ -149,9 +159,90 @@ class groupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateGroup(Request $request, $id)
     {
-        //
+       
+      
+         
+         try {
+
+     
+
+            $group = Group::findOrFail($id);
+            $authId = Auth::user()->id;
+
+            $request->validate([
+                'name' => 'required',
+                'description' => 'required',
+
+            ]);
+
+            $filename = "";
+
+            $destination = public_path("images" . $group->image);
+
+            if ($image = $request->file('image')) {
+                if (File::exists($destination)) {
+                    File::delete($destination);
+                }
+
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images'), $filename);
+            } else {
+                $filename = $request->image;
+            }
+
+
+            $group->name = $request->name;
+            $group->description = $request->description;
+            $group->image = $filename;
+            $group->save();
+
+          
+
+
+            
+            $userHasPerDel = Group_member::where('group_id', $group->id)->get();
+            foreach ($userHasPerDel as $key => $value) {
+                $value->delete();
+            }
+
+
+             $groupArr = json_decode($request->member);
+
+            // Group_member::create([
+            //     'group_id' => $group->id,
+            //     'user_id' => $authId,
+            // ]);
+
+           
+
+
+            if ($groupArr) {
+                foreach ($groupArr as $key => $userId) {
+                    $groupMember[] = [
+                        'group_id' => $group->id,
+                        'user_id' => $userId,
+                    ];
+                }
+                Group_member::insert($groupMember);
+            }
+
+
+            $data = [
+                'status' => true,
+                'message' => 'group Update Successfully.',
+                'status code' => 200,
+                'data' => $group,
+            ];
+
+            return response()->json($data);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -163,7 +254,7 @@ class groupController extends Controller
     public function destroyGroup($id)
     {
         try {
-            $group= Group::findOrFail($id);
+            $group = Group::findOrFail($id);
             $deleteImage = public_path("images" . $group->image);
             if (File::exists($deleteImage)) {
                 File::delete($deleteImage);

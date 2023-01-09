@@ -121,6 +121,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     //group
     Route::post('create_group', [groupController::class, 'createGroup']);
+    Route::post('group_update/{id}', [groupController::class, 'updateGroup']);
+    Route::get('get_singal_group/{id}', [groupController::class, 'singalGroup']);
  
     Route::get('all_user_for_group', [userController::class, 'allUserforGroup']);
     Route::delete('delete_group/{id}', [groupController::class, 'destroyGroup']);
@@ -131,8 +133,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 });
 
-   
-
+       
+ 
 
 
 //Authentaction

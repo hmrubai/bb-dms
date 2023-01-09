@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('group_files', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('member_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('member_id')->nullable();
             $table->unsignedBigInteger('group_id');
             $table->unsignedBigInteger('doc_id')->nullable();
             $table->text('description');
