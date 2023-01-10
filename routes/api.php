@@ -129,6 +129,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('user_wise_group_view', [groupController::class, 'userWiseGroupView']);
     //group document
     Route::post('create_group_documnet', [groupFileController::class, 'createGroupDocumnent']);
+
+    Route::post('group_documnet_update/{id}', [groupFileController::class, 'documnetupdate']);
+
     Route::get('get_group_document/{id}', [groupFileController::class, 'getGroupDocument']);
 
     Route::get('download_file/{id}', [groupFileController::class, 'downloadFile']);
@@ -136,6 +139,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('group_singal_document/{id}', [groupFileController::class, 'groupSingalDocumnet']);
 
     Route::delete('delete_group_documnet/{id}', [groupFileController::class, 'destroyGroupDocument']);
+
+    Route::any('share_document',[groupFileController::class,'shareDocument']);
     
 });
 

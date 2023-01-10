@@ -110,9 +110,49 @@ class groupFileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function documnetupdate(Request $request, $id)
     {
-        //
+        try {
+            $request->validate([
+                'name' => 'required',
+                'description' => 'required',
+            ]);
+            $filename = "";
+            $document = Group_file::findOrFail($id);
+            $deleteOldImage = public_path("file" . $document->file);
+
+
+            if ($image = $request->file('file')) {
+                if (File::exists($deleteOldImage)) {
+                    File::delete($deleteOldImage);
+                }
+
+                $filename = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('file'), $filename);
+            } else {
+                $filename = $request->file;
+            }
+
+            $document->name = $request->name;
+            $document->description = $request->description;
+            $document->file = $filename;
+            $data = $document->save();
+
+
+            $data = [
+                'status' => true,
+                'message' => 'Document Update Successfully.',
+                'status code' => 200,
+                'data' => $document,
+            ];
+
+            return response()->json($data);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }  
     }
 
     /**
@@ -177,6 +217,39 @@ class groupFileController extends Controller
         
     
     }
+
+    
+    public function shareDocument(Request $request)
+    {
+        try {
+            $authId = Auth::user()->id;
+        
+            $document = new Group_file();
+       
+     
+            $document->name = $request->name;
+            $document->user_id = $authId ;
+            $document->group_id = $request->group_id;
+            $document->description = $request->description;
+            $document->file = $request->file;
+            $document->save();
+
+            $data = [
+                'status' => true,
+                'message' => 'Document share Successfully.',
+                'status code' => 200,
+                // 'data' => $document,
+            ];
+            return response()->json($data);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+    }
+
+
 
 
 }

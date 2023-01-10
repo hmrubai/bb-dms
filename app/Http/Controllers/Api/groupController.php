@@ -23,6 +23,7 @@ class groupController extends Controller
             $authId = Auth::user()->id;
             $member = Group_member::where('user_id', $authId)
                 ->with('group','group.groupCreator')
+                ->latest()
                 ->get();
             $data = [
                 'status' => true,
