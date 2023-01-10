@@ -22,7 +22,7 @@ class groupController extends Controller
         try {
             $authId = Auth::user()->id;
             $member = Group_member::where('user_id', $authId)
-                ->with('group.user')
+                ->with('group','group.groupCreator')
                 ->get();
             $data = [
                 'status' => true,
@@ -210,15 +210,12 @@ class groupController extends Controller
 
              $groupArr = json_decode($request->member);
 
-            // Group_member::create([
-            //     'group_id' => $group->id,
-            //     'user_id' => $authId,
-            // ]);
+ 
 
            
 
 
-            if ($groupArr) {
+            if ($groupArr > 0) {
                 foreach ($groupArr as $key => $userId) {
                     $groupMember[] = [
                         'group_id' => $group->id,
@@ -226,6 +223,11 @@ class groupController extends Controller
                     ];
                 }
                 Group_member::insert($groupMember);
+            }else{
+                Group_member::create([
+                    'group_id' => $group->id,
+                    'user_id' => $authId,
+                ]);
             }
 
 
@@ -273,4 +275,9 @@ class groupController extends Controller
             ], 500);
         }
     }
+
+    
+
+
+
 }

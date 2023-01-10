@@ -123,7 +123,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('create_group', [groupController::class, 'createGroup']);
     Route::post('group_update/{id}', [groupController::class, 'updateGroup']);
     Route::get('get_singal_group/{id}', [groupController::class, 'singalGroup']);
- 
+
     Route::get('all_user_for_group', [userController::class, 'allUserforGroup']);
     Route::delete('delete_group/{id}', [groupController::class, 'destroyGroup']);
     Route::get('user_wise_group_view', [groupController::class, 'userWiseGroupView']);
@@ -131,10 +131,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('create_group_documnet', [groupFileController::class, 'createGroupDocumnent']);
     Route::get('get_group_document/{id}', [groupFileController::class, 'getGroupDocument']);
 
+    Route::get('download_file/{id}', [groupFileController::class, 'downloadFile']);
+
+    Route::get('group_singal_document/{id}', [groupFileController::class, 'groupSingalDocumnet']);
+
+    Route::delete('delete_group_documnet/{id}', [groupFileController::class, 'destroyGroupDocument']);
+    
 });
 
-       
- 
+
+
 
 
 //Authentaction

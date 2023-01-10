@@ -32,6 +32,11 @@ class Group extends Model
         return $this->hasMany(Group_file::class);
     }
 
+    public function groupCreator()
+    {
+        return $this->belongsTo(User::class,'user_id','id');
+    }
+
 
 
     

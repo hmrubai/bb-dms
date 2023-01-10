@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Group_file;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\File;
 class groupFileController extends Controller
 {
     /**
@@ -85,9 +85,11 @@ class groupFileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function groupSingalDocumnet($id)
     {
-        //
+        $data = Group_file::with('user')->with('group')
+        ->find($id);
+        return response()->json($data);
     }
 
     /**
@@ -119,10 +121,31 @@ class groupFileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroyGroupDocument($id)
     {
-        //
+        // return 'dcc';
+        try {
+            $document = Group_file::findOrFail($id);
+            $deleteImage = public_path("file" . $document->file);
+            if (File::exists($deleteImage)) {
+                File::delete($deleteImage);
+            }
+            $result = $document->delete();
+            $data = [
+                'status' => true,
+                'message' => 'Document Delate Successfully.',
+                'status code' => 200,
+            ];
+            return response()->json($data);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        } 
     }
+
+
 
     public function getGroupDocument($id)
     {
@@ -140,5 +163,20 @@ class groupFileController extends Controller
             ], 500);
         }
     }
+
+    public function downloadFile($id)
+    {
+
+        $groupDocument = Group_file::find($id);
+        $file = public_path('file/' . $groupDocument->file);
+        $headers = array(
+            'Content-Type: application/pdf',
+        );
+        return response()->download($file, $groupDocument->file, $headers);
+
+        
+    
+    }
+
 
 }
