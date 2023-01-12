@@ -206,13 +206,22 @@ class groupFileController extends Controller
 
     public function downloadFile($id)
     {
-
-        $groupDocument = Group_file::find($id);
-        $file = public_path('file/' . $groupDocument->file);
+        try {
+            
+                   $groupDocument = Group_file::find($id);
+        $file = public_path('file/'.$groupDocument->file);
         $headers = array(
             'Content-Type: application/pdf',
         );
-        return response()->download($file, $groupDocument->file, $headers);
+        return response()->download($file, $groupDocument->file, $headers); 
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
+
+
 
         
     
@@ -222,11 +231,17 @@ class groupFileController extends Controller
     public function shareDocument(Request $request)
     {
         try {
-            $authId = Auth::user()->id;
-        
+             $authId = Auth::user()->id;
+             
+            $request->validate([
+                'name' => 'required',
+                'description' => 'required',
+                'file' => 'required',
+                'group_id' => 'required',
+            ]);
+
+           
             $document = new Group_file();
-       
-     
             $document->name = $request->name;
             $document->user_id = $authId ;
             $document->group_id = $request->group_id;

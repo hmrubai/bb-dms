@@ -92,7 +92,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('your_document', [documentController::class, 'yourDocument']);
     Route::get('dashboard_Publish_Document', [documentController::class, 'dashboardPublishDocument']);
     Route::post('admin_document_publish/{id}', [documentController::class, 'AdminPublishDocument']);
-    Route::get('download/{id}', [documentController::class, 'download']);
+    
+   
     //show document
     Route::get('/show_sub_category/{id}', [documentController::class, 'showSubCategory']);
     Route::get('/show_sub_category_document/{id}', [documentController::class, 'showSubCategoryDocument']);
@@ -134,17 +135,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('get_group_document/{id}', [groupFileController::class, 'getGroupDocument']);
 
-    Route::get('download_file/{id}', [groupFileController::class, 'downloadFile']);
-
     Route::get('group_singal_document/{id}', [groupFileController::class, 'groupSingalDocumnet']);
 
     Route::delete('delete_group_documnet/{id}', [groupFileController::class, 'destroyGroupDocument']);
-
     Route::any('share_document',[groupFileController::class,'shareDocument']);
     
+    Route::get('download/{id}', [documentController::class, 'download']);
+    Route::get('download_file/{id}', [groupFileController::class, 'downloadFile']);
 });
-
-
 
 
 

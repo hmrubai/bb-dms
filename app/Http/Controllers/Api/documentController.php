@@ -9,6 +9,7 @@ use App\Models\sub_sub_catagory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use PhpParser\Node\Stmt\TryCatch;
 
 class documentController extends Controller
 {
@@ -196,12 +197,19 @@ class documentController extends Controller
 
     public function download($id)
     {
-        $document = document::findOrFail($id);
-        $file = public_path("file" . $document->file);
-        $headers = array(
-            'Content-Type: application/pdf',
-        );
-        return response()->download($file, $document->name, $headers);
+        try {
+            $document = document::findOrFail($id);
+            $file = public_path("file/" . $document->file);
+            $headers = array(
+                'Content-Type: application/pdf',
+            );
+            return response()->download($file, $document->name, $headers); //code...
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 
 
