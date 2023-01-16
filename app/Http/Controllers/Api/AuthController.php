@@ -26,6 +26,7 @@ class AuthController extends Controller
                 [
                     'name' => 'required',
                     'email' => 'required|email|unique:users,email',
+                    'username' => 'required|min:4|unique:users,username',
                     'password' => [
                         'required',
                         'min:6',
@@ -46,6 +47,7 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
+                'username' => $request->username,
                 'number' => $request->number,
                 'gender' => $request->gender,
                 'image' => $request->image,
